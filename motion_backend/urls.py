@@ -38,10 +38,10 @@ urlpatterns = [
         'admin/',
         admin.site.urls
     ),
-    # path(
-    #     'backend/api/social/posts',
-    #     include("post.urls")
-    # ),
+    path(
+        'backend/api/social/posts/',
+        include("post.urls")
+    ),
     path(
         'backend/api/users/',
         include("user.urls")
