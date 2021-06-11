@@ -23,6 +23,7 @@ selenium-debug.log
 *.rbc
 *.yarb
 *~
+*.sqlite3
 .git
 .hg
 .svn
