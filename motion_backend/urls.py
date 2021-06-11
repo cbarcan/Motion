@@ -64,6 +64,7 @@ urlpatterns = [
     path(
         'backend/api/docs/',
         schema_view.with_ui('swagger', cache_timeout=0),
-        name='schema-swagger-ui')
+        name='schema-swagger-ui'),
+    path('backend/api/social/friends/requests/', include('friend_request.urls'))
 ]
 
