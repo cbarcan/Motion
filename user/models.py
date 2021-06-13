@@ -14,9 +14,9 @@ class User(AbstractUser):
     REQUIRED_FIELDS = ['username']
 
     email = models.EmailField(unique=True)
+    about_me = models.CharField(max_length=300, blank=True)
     location = models.CharField(max_length=100, blank=True)
     job = models.CharField(max_length=100, blank=True)
-    about_me = models.CharField(max_length=300, blank=True)
     phone_regex = RegexValidator(regex=r'^\+?1?\d{9,15}$',
                                  message="Phone number must be entered in the format: '+999999999'. Up to 15 digits "
                                          "allowed.")
@@ -24,6 +24,8 @@ class User(AbstractUser):
     avatar = models.ImageField(upload_to=user_directory_path, blank=True, null=True)
     banner = models.ImageField(upload_to=user_directory_path, blank=True, null=True)
     things_user_likes = models.CharField(max_length=300, blank=True)
+    followers = models.ManyToManyField(to="self", blank=True, symmetrical=False, related_name="following")
+    friends = models.ManyToManyField(to="self", blank=True)
 
     def __str__(self):
         return self.username
