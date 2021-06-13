@@ -9,7 +9,10 @@ class ListUserSerializer(serializers.ModelSerializer):
     things_user_likes = serializers.SerializerMethodField()
 
     def get_things_user_likes(self, obj):
-        return list(obj.things_user_likes.split(", "))
+        if obj.things_user_likes:
+            return list(obj.things_user_likes.split(", "))
+        else:
+            return []
 
     class Meta:
         model = User
