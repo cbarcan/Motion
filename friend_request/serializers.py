@@ -9,6 +9,7 @@ class CreateFriendRequestSerializer(serializers.ModelSerializer):
     class Meta:
         model = FriendRequest
         fields = '__all__'
+        read_only_fields = ['receiver', 'requester']
 
 
 class FriendRequestSerializer(serializers.ModelSerializer):

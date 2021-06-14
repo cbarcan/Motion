@@ -1,26 +1,27 @@
-from rest_framework.generics import ListCreateAPIView, ListAPIView
+from rest_framework.generics import CreateAPIView, ListAPIView
 from friend_request.models import FriendRequest
 from friend_request.serializers import FriendRequestSerializer, CreateFriendRequestSerializer
 from django.db.models import Q
+from django.contrib.auth import get_user_model
+
+User = get_user_model()
 
 
-class ListCreateFriendRequestsView(ListCreateAPIView):
+class CreateFriendRequestsView(CreateAPIView):
     queryset = FriendRequest.objects.all()
-
-    def get_serializer_class(self):
-        if self.request.method == 'POST':
-            return CreateFriendRequestSerializer
-        return FriendRequestSerializer
+    serializer_class = CreateFriendRequestSerializer
 
     def perform_create(self, serializer):
-        serializer.save(author=self.request.user)
+        friend_id = self.kwargs['id']
+        friend = User.objects.get(id=friend_id)
+        serializer.save(receiver=friend, requester=self.request.user)
 
 
-class ListMyFriendsView(ListCreateAPIView):
+class ListMyFriendsView(ListAPIView):
     def get_queryset(self):
         """
-        This view should return a list of all the incoming
-        friend requests for the currently authenticated user.
+        This view should return a list of all the
+        friends for the currently authenticated user.
         """
         user = self.request.user
         return FriendRequest.objects.filter(Q(receiver=user) | Q(requester=user), status='A')
