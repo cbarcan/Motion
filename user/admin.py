@@ -17,7 +17,7 @@ class UserAdmin(UserAdmin):
     fieldsets = (
         (None, {'fields': ('email', 'username', 'password')}),
         ('Personal info', {'fields': ('first_name', 'last_name', 'about_me', 'phone_number', 'location', 'job',
-                                      'avatar', 'banner', 'things_user_likes')}),
+                                      'avatar', 'banner', 'things_user_likes', "following")}),
         ('Permissions', {'fields': ('is_active', 'is_staff', 'is_superuser', 'user_permissions')}),
         ('Important dates', {'fields': ('last_login', 'date_joined')}),
         ('Groups', {'fields': ('groups',)}),
