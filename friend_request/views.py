@@ -1,10 +1,12 @@
-from rest_framework.generics import CreateAPIView, ListAPIView
+from rest_framework.generics import CreateAPIView, ListAPIView, RetrieveUpdateDestroyAPIView
 from friend_request.models import FriendRequest
 from friend_request.serializers import FriendRequestSerializer, CreateFriendRequestSerializer
 from django.db.models import Q
 from django.contrib.auth import get_user_model
 
 User = get_user_model()
+
+# TODO: prevent duplicate friend requests, remove kwargs
 
 
 class CreateFriendRequestsView(CreateAPIView):
@@ -42,15 +44,11 @@ class ListMyFriendRequestsView(ListAPIView):
     serializer_class = FriendRequestSerializer
 
 
-class ListFriendRequestView(ListAPIView):
-
-    def get_queryset(self):
-        """
-        This view should return a friend request by id.
-        """
-        request_id = self.kwargs['id']
-        return FriendRequest.objects.filter(id=request_id)
-
+class RetrieveUpdateDestroyFriendRequestView(RetrieveUpdateDestroyAPIView):
+    queryset = FriendRequest.objects.all()
+    lookup_field = 'id'
     serializer_class = FriendRequestSerializer
+
+
 
 
