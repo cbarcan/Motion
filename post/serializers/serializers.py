@@ -1,9 +1,12 @@
 from rest_framework import serializers
 
-from .models import Post
+from post.models import Post
+from post.serializers.nested import NestedUserSerializer
 
 
 class CreatePostSerializer(serializers.ModelSerializer):
+    user = NestedUserSerializer()
+
     class Meta:
         model = Post
         fields = '__all__'
@@ -11,6 +14,9 @@ class CreatePostSerializer(serializers.ModelSerializer):
 
 
 class PostSerializer(serializers.ModelSerializer):
+    user = NestedUserSerializer()
+    liked = NestedUserSerializer(many=True)
+
     class Meta:
         model = Post
         fields = '__all__'
