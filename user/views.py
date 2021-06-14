@@ -1,12 +1,22 @@
 from django.contrib.auth import get_user_model
-from rest_framework.generics import ListCreateAPIView
-from rest_framework.permissions import IsAdminUser
-from user.serializers import UserSerializer
+from rest_framework.generics import ListAPIView
+from rest_framework.permissions import IsAuthenticated
+
+from user.serializers import ListUserSerializer
 
 User = get_user_model()
 
 
-class UserList(ListCreateAPIView):
+class UserList(ListAPIView):
     queryset = User.objects.all()
-    serializer_class = UserSerializer
-    permission_classes = [IsAdminUser]
+    serializer_class = ListUserSerializer
+    permission_classes = [IsAuthenticated]
+
+
+class MyUserList(ListAPIView):
+    def get_queryset(self):
+        user = self.request.user.id
+        return User.objects.filter(id=user)
+
+    serializer_class = ListUserSerializer
+    permission_classes = [IsAuthenticated]
