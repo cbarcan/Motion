@@ -42,3 +42,15 @@ class ListMyFriendRequestsView(ListAPIView):
     serializer_class = FriendRequestSerializer
 
 
+class ListFriendRequestView(ListAPIView):
+
+    def get_queryset(self):
+        """
+        This view should return a friend request by id.
+        """
+        request_id = self.kwargs['id']
+        return FriendRequest.objects.filter(id=request_id)
+
+    serializer_class = FriendRequestSerializer
+
+
