@@ -24,7 +24,7 @@ class User(AbstractUser):
     avatar = models.ImageField(upload_to=user_directory_path, blank=True, null=True)
     banner = models.ImageField(upload_to=user_directory_path, blank=True, null=True)
     things_user_likes = models.CharField(max_length=300, blank=True)
-    followers = models.ManyToManyField(to="self", blank=True, symmetrical=False, related_name="following")
+    following = models.ManyToManyField(to="self", blank=True, symmetrical=False, related_name="followers")
     friends = models.ManyToManyField(to="self", blank=True)
 
     def __str__(self):

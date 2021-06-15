@@ -44,7 +44,15 @@ urlpatterns = [
     ),
     path(
         'backend/api/users/',
-        include("user.urls")
+        include("user.urls.user_urls")
+    ),
+    path(
+        'backend/api/social/followers/',
+        include('user.urls.followers_urls')
+    ),
+    path(
+        'backend/api/social/friends/requests/',
+        include('friend_request.urls')
     ),
     path(
         'backend/api/auth/token/',

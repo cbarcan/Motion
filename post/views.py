@@ -59,13 +59,13 @@ class ListUserFollowingPosts(ListAPIView):
     serializer_class = PostSerializer
 
     def get_queryset(self):
-        return self.request.user.following.Posts
+        return Post.objects.filter(user__in=User.objects.filter(followers=self.request.user.id))
 
 
 class ListUserPosts(ListAPIView):
     serializer_class = PostSerializer
 
     def get_queryset(self):
-        return User.objects.get(pk=self.kwargs['id'].Posts)
+        return Post.objects.filter(user_id=self.kwargs['id'])
 
 
