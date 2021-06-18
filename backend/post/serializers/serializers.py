@@ -1,7 +1,7 @@
 from rest_framework import serializers
 
-from backend.post.models import Post
-from backend.post.serializers.nested import NestedUserSerializer
+from post.models import Post
+from post.serializers.nested import NestedUserSerializer
 
 
 class CreatePostSerializer(serializers.ModelSerializer):

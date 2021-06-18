@@ -9,6 +9,7 @@ https://docs.djangoproject.com/en/3.2/topics/settings/
 For the full list of settings and their values, see
 https://docs.djangoproject.com/en/3.2/ref/settings/
 """
+import ast
 import os
 from datetime import timedelta
 from pathlib import Path
@@ -20,12 +21,13 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # See https://docs.djangoproject.com/en/3.2/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = 'django-insecure-0t6-!33ug!qcvk5gya&sl&*pute7tq_)d&jug2zptehn0@(f1e'
+SECRET_KEY = 'django-insecure-0t6-!33ug!qcvk5gya&sl&*pute7tq_)d&jug2zptehn0' \
+             '@(f1e '
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = ast.literal_eval(os.environ.get('DJANGO_DEBUG'))
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ["*"]
 
 # Application definition
 
@@ -80,8 +82,12 @@ WSGI_APPLICATION = 'motion_backend.wsgi.application'
 
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': BASE_DIR / 'db.sqlite3',
+        'ENGINE': 'django.db.backends.postgresql_psycopg2',
+        'NAME': os.environ.get('POSTGRES_DB'),
+        "PORT": os.environ.get('POSTGRES_PORT'),
+        "HOST": os.environ.get('POSTGRES_HOST'),
+        "USER": os.environ.get('POSTGRES_USER'),
+        "PASSWORD": os.environ.get('POSTGRES_PASSWORD'),
     }
 }
 
@@ -90,16 +96,20 @@ DATABASES = {
 
 AUTH_PASSWORD_VALIDATORS = [
     {
-        'NAME': 'django.contrib.auth.password_validation.UserAttributeSimilarityValidator',
+        'NAME': 'django.contrib.auth.password_validation'
+                '.UserAttributeSimilarityValidator',
     },
     {
-        'NAME': 'django.contrib.auth.password_validation.MinimumLengthValidator',
+        'NAME': 'django.contrib.auth.password_validation'
+                '.MinimumLengthValidator',
     },
     {
-        'NAME': 'django.contrib.auth.password_validation.CommonPasswordValidator',
+        'NAME': 'django.contrib.auth.password_validation'
+                '.CommonPasswordValidator',
     },
     {
-        'NAME': 'django.contrib.auth.password_validation.NumericPasswordValidator',
+        'NAME': 'django.contrib.auth.password_validation'
+                '.NumericPasswordValidator',
     },
 ]
 
@@ -126,7 +136,6 @@ STATIC_ROOT = os.path.join(BASE_DIR, 'static-files')
 MEDIA_URL = '/media-files/'
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media-files')
 
-
 # Default primary key field type
 # https://docs.djangoproject.com/en/3.2/ref/settings/#default-auto-field
 
@@ -149,10 +158,12 @@ SIMPLE_JWT = {
 AUTH_USER_MODEL = 'user.User'
 
 SWAGGER_SETTINGS = {
-    'USE_SESSION_AUTH': False,  # Change settings to True to enable Django Login option
+    'USE_SESSION_AUTH': False,
+    # Change settings to True to enable Django Login option
     'LOGIN_URL': 'admin/',  # URL For Django Login
     'LOGOUT_URL': 'admin/logout/',  # URL For Django Logout
-    'SECURITY_DEFINITIONS': {  # Allows usage of Access token to make requests on the docs.
+    'SECURITY_DEFINITIONS': {
+        # Allows usage of Access token to make requests on the docs.
         'Bearer': {
             'type': 'apiKey',
             'name': 'Authorization',

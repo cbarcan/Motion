@@ -1,10 +1,12 @@
 from rest_framework import status
 from rest_framework.response import Response
 
-from backend.motion_backend.permissions import IsOwnerOrReadOnly
+from motion_backend.permissions import IsOwnerOrReadOnly
 from .models import Post
-from rest_framework.generics import ListCreateAPIView, RetrieveUpdateDestroyAPIView, UpdateAPIView, ListAPIView
-from backend.post.serializers.serializers import CreatePostSerializer, PostSerializer
+from rest_framework.generics import ListCreateAPIView, \
+    RetrieveUpdateDestroyAPIView, \
+    UpdateAPIView, ListAPIView
+from post.serializers.serializers import CreatePostSerializer, PostSerializer
 from rest_framework.permissions import IsAuthenticated
 
 from django.contrib.auth import get_user_model
@@ -59,7 +61,8 @@ class ListUserFollowingPosts(ListAPIView):
     serializer_class = PostSerializer
 
     def get_queryset(self):
-        return Post.objects.filter(user__in=User.objects.filter(followers=self.request.user.id))
+        return Post.objects.filter(user__in=User.objects.filter(
+                                       followers=self.request.user.id))
 
 
 class ListUserPosts(ListAPIView):
@@ -67,5 +70,3 @@ class ListUserPosts(ListAPIView):
 
     def get_queryset(self):
         return Post.objects.filter(user_id=self.kwargs['id'])
-
-

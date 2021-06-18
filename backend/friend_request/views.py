@@ -1,10 +1,13 @@
-from rest_framework.generics import CreateAPIView, ListAPIView, RetrieveUpdateDestroyAPIView
-from backend.friend_request.models import FriendRequest
-from backend.friend_request.serializers import FriendRequestSerializer, CreateFriendRequestSerializer
+from rest_framework.generics import CreateAPIView, ListAPIView, \
+    RetrieveUpdateDestroyAPIView
+from friend_request.models import FriendRequest
+from friend_request.serializers import FriendRequestSerializer, \
+    CreateFriendRequestSerializer
 from django.db.models import Q
 from django.contrib.auth import get_user_model
 
 User = get_user_model()
+
 
 # TODO: prevent duplicate friend requests, remove kwargs
 
@@ -26,7 +29,8 @@ class ListMyFriendsView(ListAPIView):
         friends for the currently authenticated user.
         """
         user = self.request.user
-        return FriendRequest.objects.filter(Q(receiver=user) | Q(requester=user), status='A')
+        return FriendRequest.objects.filter(
+            Q(receiver=user) | Q(requester=user), status='A')
 
     serializer_class = FriendRequestSerializer
 
@@ -39,7 +43,8 @@ class ListMyFriendRequestsView(ListAPIView):
         friend requests for the currently authenticated user.
         """
         user = self.request.user
-        return FriendRequest.objects.filter(Q(receiver=user) | Q(requester=user))
+        return FriendRequest.objects.filter(
+            Q(receiver=user) | Q(requester=user))
 
     serializer_class = FriendRequestSerializer
 
@@ -48,7 +53,3 @@ class RetrieveUpdateDestroyFriendRequestView(RetrieveUpdateDestroyAPIView):
     queryset = FriendRequest.objects.all()
     lookup_field = 'id'
     serializer_class = FriendRequestSerializer
-
-
-
-

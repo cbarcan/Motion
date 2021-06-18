@@ -5,7 +5,6 @@ from django.db import migrations, models
 
 
 class Migration(migrations.Migration):
-
     dependencies = [
         migrations.swappable_dependency(settings.AUTH_USER_MODEL),
         ('post', '0002_rename_posts_post'),
@@ -15,6 +14,8 @@ class Migration(migrations.Migration):
         migrations.AddField(
             model_name='post',
             name='liked',
-            field=models.ManyToManyField(blank=True, related_name='liked_Posts', to=settings.AUTH_USER_MODEL),
+            field=models.ManyToManyField(blank=True,
+                                         related_name='liked_Posts',
+                                         to=settings.AUTH_USER_MODEL),
         ),
     ]

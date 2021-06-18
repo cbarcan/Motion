@@ -1,9 +1,10 @@
 from django.contrib.auth import get_user_model
-from rest_framework.generics import ListAPIView, RetrieveAPIView, GenericAPIView
+from rest_framework.generics import ListAPIView, RetrieveAPIView, \
+    GenericAPIView
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
 
-from backend.user.serializers import ListUserSerializer
+from user.serializers import ListUserSerializer
 
 User = get_user_model()
 
@@ -23,6 +24,7 @@ class MyUserList(RetrieveAPIView):
 
 
 class ToggleFollow(GenericAPIView):
+    queryset = User.objects.all()
     serializer_class = ListUserSerializer
     permission_classes = [IsAuthenticated]
 
@@ -30,9 +32,11 @@ class ToggleFollow(GenericAPIView):
         follower = request.user
         following = User.objects.get(id=kwargs["pk"])
         if follower == following:
-            return Response({"detail": "Users cannot do this operation with themselves."})
+            return Response(
+                {"detail": "Users cannot do this operation with themselves."})
         else:
-            if following in User.objects.filter(followers=self.request.user.id):
+            if following in User.objects.filter(
+                    followers=self.request.user.id):
                 follower.following.remove(following)
                 follower.save()
                 serializer = self.get_serializer(following)

@@ -1,6 +1,6 @@
 from django.urls import path
 
-from backend.user.views import FollowersList, FollowingList, ToggleFollow
+from user.views import FollowersList, FollowingList, ToggleFollow
 
 urlpatterns = [
     path(

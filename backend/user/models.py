@@ -18,13 +18,19 @@ class User(AbstractUser):
     location = models.CharField(max_length=100, blank=True)
     job = models.CharField(max_length=100, blank=True)
     phone_regex = RegexValidator(regex=r'^\+?1?\d{9,15}$',
-                                 message="Phone number must be entered in the format: '+999999999'. Up to 15 digits "
-                                         "allowed.")
-    phone_number = models.CharField(validators=[phone_regex], max_length=17, blank=True)
-    avatar = models.ImageField(upload_to=user_directory_path, blank=True, null=True)
-    banner = models.ImageField(upload_to=user_directory_path, blank=True, null=True)
+                                 message="Phone number must be entered in "
+                                         "the format: '+999999999'. Up to 15 "
+                                         "digits allowed.")
+    phone_number = models.CharField(validators=[phone_regex], max_length=17,
+                                    blank=True)
+    avatar = models.ImageField(upload_to=user_directory_path, blank=True,
+                               null=True)
+    banner = models.ImageField(upload_to=user_directory_path, blank=True,
+                               null=True)
     things_user_likes = models.CharField(max_length=300, blank=True)
-    following = models.ManyToManyField(to="self", blank=True, symmetrical=False, related_name="followers")
+    following = models.ManyToManyField(to="self", blank=True,
+                                       symmetrical=False,
+                                       related_name="followers")
     friends = models.ManyToManyField(to="self", blank=True)
 
     def __str__(self):

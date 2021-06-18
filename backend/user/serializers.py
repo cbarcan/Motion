@@ -16,7 +16,8 @@ class ListUserSerializer(serializers.ModelSerializer):
             return []
 
     def get_logged_in_user_is_following(self, obj):
-        if obj in User.objects.filter(followers=self.context["request"].user.id):
+        if obj in User.objects.filter(
+                followers=self.context["request"].user.id):
             return True
         else:
             return False

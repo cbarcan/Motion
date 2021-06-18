@@ -6,7 +6,6 @@ import django.db.models.deletion
 
 
 class Migration(migrations.Migration):
-
     initial = True
 
     dependencies = [
@@ -17,12 +16,22 @@ class Migration(migrations.Migration):
         migrations.CreateModel(
             name='FriendRequest',
             fields=[
-                ('id', models.BigAutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
-                ('status', models.CharField(choices=[('P', 'pending'), ('A', 'accepted'), ('R', 'rejected')], default='P', max_length=1)),
+                ('id', models.BigAutoField(auto_created=True, primary_key=True,
+                                           serialize=False,
+                                           verbose_name='ID')),
+                ('status', models.CharField(
+                    choices=[('P', 'pending'), ('A', 'accepted'),
+                             ('R', 'rejected')], default='P', max_length=1)),
                 ('created', models.DateTimeField(auto_now_add=True)),
                 ('updated', models.DateTimeField(auto_now=True)),
-                ('receiver', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, related_name='friend_requests_received', to=settings.AUTH_USER_MODEL)),
-                ('requester', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, related_name='friend_requests_sent', to=settings.AUTH_USER_MODEL)),
+                ('receiver',
+                 models.ForeignKey(on_delete=django.db.models.deletion.CASCADE,
+                                   related_name='friend_requests_received',
+                                   to=settings.AUTH_USER_MODEL)),
+                ('requester',
+                 models.ForeignKey(on_delete=django.db.models.deletion.CASCADE,
+                                   related_name='friend_requests_sent',
+                                   to=settings.AUTH_USER_MODEL)),
             ],
         ),
     ]

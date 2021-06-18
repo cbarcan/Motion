@@ -1,5 +1,5 @@
 from rest_framework import serializers
-from backend.friend_request.models import FriendRequest
+from friend_request.models import FriendRequest
 from django.contrib.auth import get_user_model
 
 User = get_user_model()
@@ -34,4 +34,3 @@ class FriendRequestSerializer(serializers.ModelSerializer):
             "requester",
             "requester_name"
         ]
-
