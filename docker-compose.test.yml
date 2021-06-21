@@ -2,7 +2,7 @@ version: '3'
 
 services:
   backend:
-    image: registry.gitlab.propulsion-home.ch/roncaglionidaniele/cicd-may2021-week7day3:latest
+    image: registry.gitlab.propulsion-home.ch/full-stack/batch-16-may-2021/motion-backend/team-5:latest
     env_file:
       - .env/dev.env
     command: "sh /scripts/run.sh"
