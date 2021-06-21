@@ -1,7 +1,9 @@
 stages:
   - pull
   - build
+  - lint
   - push
+  - cleanup
   - deploy
 
 before_script:
@@ -23,14 +25,14 @@ build:
   script:
     - docker build --tag="$CI_PIPELINE_ID":"$CI_COMMIT_REF_NAME" --cache-from="$CI_REGISTRY_IMAGE":latest .
 
-#lint:
-#  stage: lint
-#  tags:
-#    - test
-#  script:
-#    - export CI_PIPELINE_ID=$CI_PIPELINE_ID
-#    - export CI_BUILD_REF_NAME=$CI_COMMIT_REF_NAME
-#    - docker-compose  -f docker-compose.ci.yml run app flake8 .
+lint:
+  stage: lint
+  tags:
+    - test
+  script:
+    - export CI_PIPELINE_ID=$CI_PIPELINE_ID
+    - export CI_BUILD_REF_NAME=$CI_COMMIT_REF_NAME
+    - docker-compose  -f docker-compose.ci.yml run app flake8 .
 
 push latest:
   stage: push
@@ -50,12 +52,12 @@ push:
     - docker tag "$CI_PIPELINE_ID":"$CI_COMMIT_REF_NAME" "$CI_REGISTRY_IMAGE":master
     - docker push "$CI_REGISTRY_IMAGE":master
 
-#cleanup:
-#  stage: cleanup
-#  when: always
-#  script:
-#    - docker-compose -p "$CI_PIPELINE_ID" -f docker-compose.ci.yml down --remove-orphans
-#    - docker rmi -f "$CI_PIPELINE_ID":"$CI_COMMIT_REF_NAME"
+cleanup:
+  stage: cleanup
+  when: always
+  script:
+    - docker-compose -p "$CI_PIPELINE_ID" -f docker-compose.ci.yml down --remove-orphans
+    - docker rmi -f "$CI_PIPELINE_ID":"$CI_COMMIT_REF_NAME"
 
 deploy:
   stage: deploy
