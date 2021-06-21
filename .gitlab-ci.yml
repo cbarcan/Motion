@@ -2,7 +2,6 @@ stages:
   - pull
   - build
   - push
-  - cleanup
   - deploy
 
 before_script:
@@ -51,12 +50,12 @@ push:
     - docker tag "$CI_PIPELINE_ID":"$CI_COMMIT_REF_NAME" "$CI_REGISTRY_IMAGE":master
     - docker push "$CI_REGISTRY_IMAGE":master
 
-cleanup:
-  stage: cleanup
-  when: always
-  script:
-    - docker-compose -p "$CI_PIPELINE_ID" -f docker-compose.ci.yml down --remove-orphans
-    - docker rmi -f "$CI_PIPELINE_ID":"$CI_COMMIT_REF_NAME"
+#cleanup:
+#  stage: cleanup
+#  when: always
+#  script:
+#    - docker-compose -p "$CI_PIPELINE_ID" -f docker-compose.ci.yml down --remove-orphans
+#    - docker rmi -f "$CI_PIPELINE_ID":"$CI_COMMIT_REF_NAME"
 
 deploy:
   stage: deploy
