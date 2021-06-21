@@ -44,6 +44,10 @@ urlpatterns = [
                       'backend/api/social/posts/',
                       include("post.urls")
                   ),
+                  # path(
+                  #     'backend/api/social/comments/',
+                  #     include("motion_backend.comment.urls")
+                  # ),
                   path(
                       'backend/api/users/',
                       include("user.urls.user_urls")
@@ -53,7 +57,7 @@ urlpatterns = [
                       include('user.urls.followers_urls')
                   ),
                   path(
-                      'backend/api/social/friends/requests/',
+                      'backend/api/social/friends/',
                       include('friend_request.urls')
                   ),
                   path(
@@ -75,8 +79,6 @@ urlpatterns = [
                       'backend/api/docs/',
                       schema_view.with_ui('swagger', cache_timeout=0),
                       name='schema-swagger-ui'),
-                  path('backend/api/social/friends/',
-                       include('friend_request.urls'))
               ] + static(settings.STATIC_URL,
                          document_root=settings.STATIC_ROOT) \
               + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
