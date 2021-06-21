@@ -5,7 +5,6 @@ from post.serializers.nested import NestedUserSerializer
 
 
 class CreatePostSerializer(serializers.ModelSerializer):
-    # user = NestedUserSerializer()
 
     class Meta:
         model = Post

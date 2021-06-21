@@ -21,8 +21,7 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # See https://docs.djangoproject.com/en/3.2/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = 'django-insecure-0t6-!33ug!qcvk5gya&sl&*pute7tq_)d&jug2zptehn0' \
-             '@(f1e '
+SECRET_KEY = 'django-insecure-0t6-!33ug!qcvk5gya&sl&*pute7tq_)d&jug2zptehn0@(f1e'
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = ast.literal_eval(os.environ.get('DJANGO_DEBUG'))
@@ -131,10 +130,11 @@ USE_TZ = True
 
 
 STATIC_URL = '/static-files/'
-STATIC_ROOT = os.path.join(BASE_DIR, 'static-files')
+STATIC_ROOT = '/static-files/'
 
 MEDIA_URL = '/media-files/'
-MEDIA_ROOT = os.path.join(BASE_DIR, 'media-files')
+MEDIA_ROOT = '/media-files/'
+
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/3.2/ref/settings/#default-auto-field
