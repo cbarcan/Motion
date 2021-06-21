@@ -15,16 +15,13 @@ from datetime import timedelta
 from pathlib import Path
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
-from django.urls import path, include
-
-
 BASE_DIR = Path(__file__).resolve().parent.parent
 
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/3.2/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = 'django-insecure-0t6-!33ug!qcvk5gya&sl&*pute7tq_)d&jug2zptehn0@(f1e '
+SECRET_KEY = 'django-insecure-0t6-!33ug!qcvk5gya&sl&*pute7tq_)d&jug2zptehn0@(f1e'
 
 # SECURITY WARNING: don't run with debug turned on in production!
 # DEBUG = ast.literal_eval(os.environ.get('DJANGO_DEBUG'))
@@ -62,7 +59,7 @@ MIDDLEWARE = [
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
 ]
 
-ROOT_URLCONF = "motion_backend.urls"
+ROOT_URLCONF = 'motion_backend.urls'
 
 TEMPLATES = [
     {
@@ -138,9 +135,11 @@ USE_TZ = True
 
 
 STATIC_URL = '/static-files/'
+# STATIC_ROOT = '/static-files/'
 STATIC_ROOT = os.path.join(BASE_DIR, 'static-files')
 
 MEDIA_URL = '/media-files/'
+# MEDIA_ROOT = '/media-files/
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media-files')
 
 # Default primary key field type
