@@ -84,25 +84,3 @@ class RetrieveUserView(RetrieveAPIView):
     lookup_field = 'pk'
     serializer_class = ListUserSerializer
     permission_classes = [IsAuthenticated]
-
-
-class RetrieveUpdateDestroyMyUserView(RetrieveUpdateDestroyAPIView):
-    serializer_class = ListUserSerializer
-    permission_classes = [IsOwnerOrReadOnly]
-
-    def get_object(self):
-        return self.request.user
-
-    def perform_update(self, serializer):
-        if "things_user_likes" in self.request.data:
-            things_user_likes = self.request.data["things_user_likes"][1: len(self.request.data["things_user_likes"]) - 1]
-            serializer.save(things_user_likes=things_user_likes)
-        else:
-            serializer.save()
-
-
-class RetrieveUserView(RetrieveAPIView):
-    queryset = User.objects.all()
-    lookup_field = 'pk'
-    serializer_class = ListUserSerializer
-    permission_classes = [IsAuthenticated]

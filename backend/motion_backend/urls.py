@@ -44,10 +44,10 @@ urlpatterns = [
                       'backend/api/social/posts/',
                       include("post.urls")
                   ),
-                  # path(
-                  #     'backend/api/social/comments/',
-                  #     include("motion_backend.comment.urls")
-                  # ),
+                  path(
+                      'backend/api/social/comments/',
+                      include("comment.urls")
+                  ),
                   path(
                       'backend/api/users/',
                       include("user.urls.user_urls")

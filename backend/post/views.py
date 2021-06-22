@@ -85,6 +85,13 @@ class ListFriendsPosts(ListAPIView):
         return Post.objects.filter(user__in=self.request.user.friends.values("id"))
 
 
+class ListFriendsPosts(ListAPIView):
+    serializer_class = PostSerializer
+
+    def get_queryset(self):
+        return Post.objects.filter(user__in=self.request.user.friends.values("id"))
+
+
 class ListUserPosts(ListAPIView):
     serializer_class = PostSerializer
 

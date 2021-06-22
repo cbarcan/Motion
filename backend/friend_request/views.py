@@ -1,3 +1,4 @@
+from rest_framework.response import Response
 from rest_framework.generics import CreateAPIView, ListAPIView, \
     RetrieveUpdateDestroyAPIView
 from rest_framework.permissions import IsAuthenticated
@@ -8,7 +9,6 @@ from friend_request.serializers import FriendRequestSerializer, \
 from django.db.models import Q
 from django.contrib.auth import get_user_model
 
-from motion_backend.permissions import IsOwnerOrReadOnly
 from user.serializers import ListUserSerializer
 
 User = get_user_model()
@@ -60,4 +60,12 @@ class RetrieveUpdateDestroyFriendRequestView(RetrieveUpdateDestroyAPIView):
     lookup_field = 'id'
     serializer_class = FriendRequestSerializer
     permission_classes = [IsAuthenticated]
-    permission_classes = [IsAuthenticated]
+
+    def patch(self, request, *args, **kwargs):
+        if self.queryset.get().status == 'P':
+            if request.data['status'] == 'A':
+                self.queryset.get().receiver.friends.add(self.queryset.get().requester)
+                self.queryset.get().receiver.save()
+            return self.partial_update(request, *args, **kwargs)
+        else:
+            return Response({"detail": "You can only change pending requests!"})
