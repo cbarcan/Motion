@@ -15,6 +15,9 @@ const Wrapper = styled.div`
 
 const Posts = () => {
     const [posts, setPosts] = useState({}); 
+    const [firstName, setFirstName] = useState(""); 
+    const [avatar, setAvatar] = useState(""); 
+
     
     const token = `Bearer ${localStorage.getItem("token")}`;
 
@@ -33,6 +36,26 @@ const Posts = () => {
     fetch('https://motion.propulsion-home.ch/backend/api/social/posts/', myInit)
         .then(response => response.json())
         .then(postsInfo => setPosts(postsInfo))
+
+
+    // fetch user data
+    const url = "https://motion.propulsion-home.ch/backend/api/users/me/";
+    const config = {
+        method: "GET",
+        headers: new Headers({
+            "Content-Type": "application/json",
+            "Authorization": token
+        }),
+    }
+
+    const fetchMe = async () => {
+        const res = await fetch(url, config);
+        const resData = await res.json();
+        setFirstName(resData.first_name);
+        setAvatar(resData.avatar);
+    }
+        fetchMe()
+    
     
     }, [])
 
@@ -42,7 +65,7 @@ const Posts = () => {
             <Main>
                 <Wrapper>
                     <Search/>
-                    <MainWall posts={posts.results} />
+                    <MainWall first_name={firstName} posts={posts.results} avatar={avatar} />
                 </Wrapper>
             </Main>
         </>

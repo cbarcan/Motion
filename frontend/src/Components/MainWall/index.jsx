@@ -72,17 +72,16 @@ const Jenpost = styled.div `
 const MainWall = (props) => {
 return (
             <Wall>
-                <LeftWall>
-                        
-                       <Masonry
+                <LeftWall>                        
+                    <Masonry
                         breakpointCols={2}
                         className="my-masonry-grid"
                         columnClassName="my-masonry-grid_column"> 
-                       
+                
                         <Jenpost>
                             <img className='profile' src={localStorage.profilePic} alt='profile'/>
-                            <Input name="What’s on your mind, Jennifer?" type="text" />
-                              <Popup
+                            <Input name={`What’s on your mind, ${props.first_name}?`} type="text" />
+                            <Popup
                             trigger={<button><img src={send_button} alt='send'/></button>}
                             modal
                             nested 
@@ -91,24 +90,21 @@ return (
                                     close=>(
                                         <div className="modal">
                                         <button className="close" onClick={close}>
-                                         &times;
+                                            &times;
                                         </button>
 
                                         </div>
                                     )
                                 }
                                 <span> 
-                                        <PopupPost></PopupPost>
+                                        <PopupPost avatar={props.avatar} first_name={props.first_name}></PopupPost>
                                 </span>
                             </Popup>
                         </Jenpost>
                         {props.posts && props.posts.map((post)=> <Post key={post.id} post={post}/>)}
                         </Masonry>       
                 </LeftWall>
-            </Wall>
-            
-        )
-            
+            </Wall>           
+        )          
 }
-
 export default MainWall; 
