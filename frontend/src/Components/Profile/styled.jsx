@@ -2,7 +2,7 @@ import styled from "styled-components";
 import backgroundIMG from '../../assets/images/ProfileBackground.png'
 
 export const BackgroundImg = styled.img`
-    background-image: url(${backgroundIMG});
+    background-image: url(${props => props.backgroundIMG});
     position: absolute;
     width: 1442px;
     height: 320px;

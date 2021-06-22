@@ -39,7 +39,7 @@ const ProfileHead = () => {
 
     return (
         <>
-            <BackgroundImg></BackgroundImg>
+            <BackgroundImg backgroundIMG={userData.banner}></BackgroundImg>
             <ProfileBox>
                 <BoxLeft>
                     <ProfileLeft>

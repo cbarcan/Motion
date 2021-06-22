@@ -2,10 +2,82 @@ import Header from "../Components/Header";
 import { EditBoxLeft, EditBoxRight, ProfileEditBox } from "../Components/Profile/EditStyled";
 import { BackgroundImg } from "../Components/Profile/styled";
 import { InputWrapper, Main } from "../Style/container";
-import { useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 import Input from "../Components/Input";
 import styled from "styled-components";
 import { useHistory } from "react-router";
+import { useDispatch } from 'react-redux';
+
+
+const ThingsILikeContainer = styled.div`  
+    border: red solid 2px;
+    display: flex;
+    flex-direction: column;
+
+    p{
+        margin-bottom: 20px;
+    }
+    #removeThingUserLikes{
+        border: none;
+        margin-left: 10px;
+        width: 5px;
+        height: 5px;
+        cursor: pointer;
+    }
+
+`
+
+const ThingsILike = styled.div`
+    border: green solid 2px;
+    display: flex;
+    flex-wrap: wrap;
+    flex-direction: column;
+    justify-items: start;
+    align-items: space-between;
+    margin-right: 50px;
+    height: 130px;
+
+    .thingILike {    
+        border: blue solid 2px; 
+        z-index: 1;
+        border-radius: 20px;
+        box-shadow: rgba(0, 0, 0, 0.15) 1.95px 1.95px 2.6px;
+        border: none;
+        margin: 5px;
+        padding: 8px 15px 8px 15px;
+        width: max-content;
+        height: max-content;
+        font-size: 12px;
+        background-color: rgba(240, 241, 242);    
+    }
+`
+
+const addThingYouLikeContainer = styled.div`
+    
+        border: pink dotted 5px;
+
+        display: flex;
+        flex-direction: row;
+        justify-content: space-between;
+        align-items: flex-end;
+        height: 30px;
+        
+            #addThingYouLikeInput{
+            border: none;
+            padding: 0px 0px 10px 0px;
+        }
+
+            #addThingYouLikeButton{
+            padding: 10px 30px 10px 30px;
+            text-align: center;
+            border-radius: 25px;
+            border: none; 
+            box-shadow: rgba(0, 0, 0, 0.15) 1.95px 1.95px 2.6px;
+            background-color: white;
+            cursor: pointer;
+        }
+`
+
 
 const EmailWrapper = styled.div`
         display: flex;
@@ -72,6 +144,16 @@ const Hobbies = styled.div`
     align-items: center;
 `
 
+const Banner = styled.img`
+    background-image: url(${(props) => props.banner});
+    position: absolute;
+    width: 1442px;
+    height: 320px;
+    left: 0px;
+    top: 0px;
+    z-index: -1;
+`
+
 const Hobby = styled.p`
     height: 32px;
     width: fit-content;
@@ -105,40 +187,102 @@ const Hobby = styled.p`
 
 const ProfileEdit = () => {
 
+    const dispatch = useDispatch();
+    let fileRefBanner = React.createRef();  
+
+
     const [isOpen, setIsOpen] = useState(false)
-    const [userData, setUserData] = useState({});
+    //const [userData, setUserData] = useState({});
+
+
+    const [userName,setUserName] = useState("");    
+    const [firstName,setFirstName] = useState(""); 
+    const [lastName,setLastName] = useState(""); 
+    const [email,setEmail] = useState("");
+    const [location,setLocation] = useState("");
+    const [about,setAbout] = useState("");
+    const [thingsUserLikes,setThingsUserLikes] = useState([]);
+    const [avatar,setAvatar] = useState("");
+    const [banner,setBanner] = useState("");    
+    const [currentThingUserLikes,setCurrentThingUserLikes] = useState("");
+    const [showUploadAndRemove,setShowUploadAndRemove] = useState(false);
+    const [showChangesSaved, setShowChangesSaved] = useState(false);
+    const [showDeleteButtonText, setShowDeleteButtonText] = useState(false);
+
+
     const history = useHistory();
 
-    const firstNameChanger = (e) => {
-        setUserData({first_name: e.target.value})
+    const changeFirstNameHandler = e => {
+        setFirstName(e.target.value);        
+    } 
+
+    const changeLastNameHandler = e => {
+        setLastName(e.target.value);        
+    } 
+
+    const changeUserNameHandler = e => {
+        setUserName(e.target.value);        
+    } 
+
+    const changeEmailHandler = e => {
+        setEmail(e.target.value);        
+    } 
+
+    const changeLocationHandler = e => {
+        setLocation(e.target.value);        
+    } 
+
+    const changeAboutHandler = e => {
+        setAbout(e.target.value);
     }
 
-    const lastNameChanger = (e) => {
-        setUserData({last_name: e.target.value})
+    const currentThingUserLikesHandler = e => {
+        setCurrentThingUserLikes(e.target.value);
+        //console.log(currentThingUserLikes);
     }
 
-    const emailChanger = (e) => {
-        setUserData({email: e.target.value})
+    const addCurrentThingUserLikesHandler = () => {
+        setThingsUserLikes([...thingsUserLikes,currentThingUserLikes]);
+        setCurrentThingUserLikes("");
+    } 
+
+    const removeThingUserLikesHandler = activityToBeRemoved => {
+        setThingsUserLikes(thingsUserLikes.filter(activity=>activity!==activityToBeRemoved));
+
+    }
+    
+    const updateBackgroundHandler = e => {
+        const bannerRef = fileRefBanner.current.files[0];
+        //console.log(bannerRef);
+        const bannerURL = URL.createObjectURL(bannerRef);
+        console.log('update banner', bannerURL);
+        setBanner(bannerURL);
+
+        const formData = new FormData();
+        const banner = e.target.files[0];
+        //console.log(banner);
+        formData.append('banner', banner);
+        formData.append('comment', "new banner");
+        const headers = new Headers({"Authorization":`Bearer ${localStorage.getItem("token")}`});
+        const config = {
+            headers,
+            method: 'PATCH',
+            body: formData
+        }        
+        fetch('https://motion.propulsion-home.ch/backend/api/users/me/', config).then(data => data.json());
+        
     }
 
-    const usernameChanger = (e) => {
-        setUserData({username: e.target.value})
+    const openImageSelector = () => {
+        fileRefBanner.current.click();        
     }
-
-    const locationChanger = (e) => {
-        setUserData({location: e.target.value})
-    }
-
-    const aboutMeChanger = (e) => {
-        setUserData({about_me: e.target.value})
-    }
-
    
     const avatarHandler = async (e) => {
 
         const url = "https://motion.propulsion-home.ch/backend/api/users/me/";
         let token = localStorage.token
         token = `Bearer ${token}`
+        console.log(e)
 
         const file = e.target.files[0];
         const formData = new FormData();
@@ -154,8 +298,7 @@ const ProfileEdit = () => {
 
         const res = await fetch(url, config);
         const resData = await res.json();
-        console.log("res ", resData)
-        setUserData({avatar: resData.avatar})
+        setAvatar(resData.avatar);
         localStorage.setItem('profilePic', resData.avatar)
     }
 
@@ -178,11 +321,17 @@ const ProfileEdit = () => {
         const fetchUsers = async () => {
           const res = await fetch(url, config);
           const resData = await res.json();
-          setUserData(resData)
+          setUserName(resData.username);
+          setFirstName(resData.first_name);
+          setLastName(resData.last_name);
+          setEmail(resData.email);
+          setLocation(resData.location);
+          setAbout(resData.about_me);
+          setThingsUserLikes(resData.things_user_likes);
+          setAvatar(resData.avatar);
         }
-
         fetchUsers()
-      }, [])
+    }, [])
 
     const open = () => {
         setIsOpen(!isOpen)
@@ -193,12 +342,6 @@ const ProfileEdit = () => {
         const url = "https://motion.propulsion-home.ch/backend/api/users/me/";
         let token = localStorage.token
         token = `Bearer ${token}`
-        const email = userData.email;
-        const first_name = userData.first_name;
-        const last_name = userData.last_name;
-        const username = userData.username;
-        const location = userData.location;
-        const about_me = userData.about_me;
 
         const config = {
             method: "PATCH",
@@ -207,19 +350,40 @@ const ProfileEdit = () => {
                 "Authorization": token.toString()
             }),
             body: JSON.stringify({
-                email,
-                first_name,
-                last_name,
-                username,
-                location,
-                about_me,
+                email: email,
+                first_name : firstName,
+                last_name : lastName,
+                username : userName,
+                location: location,
+                about_me: about,
+                things_user_likes: thingsUserLikes
             })
         }
     
         const fetchUsers = async () => {
           const res = await fetch(url, config);
           const resData = await res.json();
-          setUserData(resData)
+            
+          // save user data in react state
+          // setUserData(resData)
+          setUserName(resData.username);
+          setFirstName(resData.first_name);
+          setLastName(resData.last_name);
+          setEmail(resData.email);
+          setLocation(resData.location);
+          setAbout(resData.about_me);
+
+
+
+        //save user data to redux state
+        const action = {
+        type: 'userData',
+        payload: resData
+        }
+
+        dispatch(action);
+
+
         }
 
         fetchUsers()
@@ -242,7 +406,6 @@ const ProfileEdit = () => {
         const fetchUsers = async () => {
             const res = await fetch(url, config);
             const resData = await res.json();
-            console.log(resData)
           }
   
           fetchUsers()
@@ -255,11 +418,13 @@ const ProfileEdit = () => {
         <>
             <Header />
             <Main>
-                <BackgroundImg></BackgroundImg>
+                <Banner banner={banner}></Banner>
                 <ProfileEditBox>
                     <EditBoxLeft>
+                        <p id="updateBackgroundText" onClick={openImageSelector}>Update background image</p>
+                        <input name="updateBackgroundInput"  hidden type="file" accept="image/png, image/jpeg"  ref={fileRefBanner} onChange={updateBackgroundHandler} id="updateBackgroundInput" />
                         <div className='editTopLeft'>
-                            <img src={userData.avatar} alt='profile'/>
+                            <img src={avatar} alt='profile'/>
                             <button onClick={open} className='whiteButton'>UPDATE IMAGE</button>
                             {isOpen && <div className='popup'>
                                 <label htmlFor='file-upload' className='fileUpload'>Upload file</label>
@@ -278,13 +443,13 @@ const ProfileEdit = () => {
                             <InputWrapper className="input">                        
                                 <EmailWrapper>
                                     <p>First name</p> 
-                                    <Input name="firstName" type="text" id='firstName' value={userData.first_name} onChange={firstNameChanger}/>
+                                    <Input name="firstName" type="text" id='firstName' value={firstName} onChange={changeFirstNameHandler}/>
                                 </EmailWrapper>
                             </InputWrapper>
                             <InputWrapper className="input">
                                 <EmailWrapper>
                                     <p>Last Name</p>
-                                    <Input name="lastName" type="text" id='lastName' value={userData.last_name} onChange={lastNameChanger}/>
+                                    <Input name="lastName" type="text" id='lastName' value={lastName} onChange={changeLastNameHandler}/>
                                 </EmailWrapper>
                             </InputWrapper>
                         </ValidationWrapper>
@@ -292,13 +457,13 @@ const ProfileEdit = () => {
                             <InputWrapper className="input">                        
                                 <EmailWrapper>
                                     <p>Email</p> 
-                                    <Input name="Email" type="text" id='email' value={userData.email} onChange={emailChanger} />
+                                    <Input name="Email" type="text" id='email' value={email} onChange={changeEmailHandler} />
                                 </EmailWrapper>
                             </InputWrapper>
                             <InputWrapper className="input">
                                 <EmailWrapper>
                                     <p>Username</p>
-                                    <Input name="Username" type="text" id='username' value={userData.username} onChange={usernameChanger} />
+                                    <Input name="Username" type="text" id='username' value={userName} onChange={changeUserNameHandler} />
                                 </EmailWrapper>
                             </InputWrapper>
                         </ValidationWrapper>
@@ -306,7 +471,7 @@ const ProfileEdit = () => {
                             <InputWrapper className="input">                        
                                 <EmailWrapper>
                                     <p>Location</p> 
-                                    <Input name="Location" type="text" id='location' value={userData.location} onChange={locationChanger} />
+                                    <Input name="Location" type="text" id='location' value={location} onChange={changeLocationHandler} />
                                 </EmailWrapper>
                             </InputWrapper>
                             <InputWrapper className="input">
@@ -320,7 +485,7 @@ const ProfileEdit = () => {
                             <InputWrapper className="input">                        
                                 <EmailWrapper>
                                     <p>About me</p> 
-                                    <Input name="About me" type="text" id='aboutMe' value={userData.about_me} onChange={aboutMeChanger} />
+                                    <Input name="About me" type="text" id='aboutMe' value={about} onChange={changeAboutHandler} />
                                 </EmailWrapper>
                             </InputWrapper>
                             <InputWrapper className="input">
@@ -330,16 +495,18 @@ const ProfileEdit = () => {
                                 </EmailWrapper>
                             </InputWrapper>                            
                         </ValidationWrapper>
+                        <ThingsILikeContainer>
                             <p>Things I like</p>
-                        <Hobbies>
-                            <Hobby>Guitar <button>X</button></Hobby>
-                        </Hobbies>
-                        <ValidationWrapper>
-                            <InputWrapper className="hobby">
-                                <Input name="Type something...." type="text" id='hobby' />                                                         
-                            </InputWrapper> 
-                            <button>ADD</button>   
-                        </ValidationWrapper>
+                            <ThingsILike>
+                                {(thingsUserLikes && thingsUserLikes.length!==0)?
+                                thingsUserLikes.map(activity => <div className="thingILike" key={activity+Math.random()*100000000}>{activity}<button onClick={()=>removeThingUserLikesHandler(activity)} id="removeThingUserLikes">X</button></div>)
+                                :null}
+                            </ThingsILike>
+                            <addThingYouLikeContainer>
+                                <input id="addThingYouLikeInput"  onChange={currentThingUserLikesHandler} maxLength="20" value={currentThingUserLikes} type="text" placeholder="Type something.."></input>
+                                <button onClick={addCurrentThingUserLikesHandler} id="addThingYouLikeButton">ADD</button>
+                            </addThingYouLikeContainer>
+                        </ThingsILikeContainer>
                     </EditBoxRight>
                 </ProfileEditBox>
             </Main>
