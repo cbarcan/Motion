@@ -1,26 +1,26 @@
 from django.contrib.auth import get_user_model
+from django.db.models import Q
 from rest_framework.generics import ListAPIView, RetrieveAPIView, \
-    GenericAPIView
+    GenericAPIView, RetrieveUpdateDestroyAPIView
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
 
+from motion_backend.permissions import IsOwnerOrReadOnly
 from user.serializers import ListUserSerializer
 
 User = get_user_model()
 
 
 class UserList(ListAPIView):
-    queryset = User.objects.all()
     serializer_class = ListUserSerializer
     permission_classes = [IsAuthenticated]
 
-
-class MyUserList(RetrieveAPIView):
-    serializer_class = ListUserSerializer
-    permission_classes = [IsAuthenticated]
-
-    def get_object(self):
-        return self.request.user
+    def get_queryset(self):
+        queryset = User.objects.all()
+        search = self.request.query_params.get('search')
+        if search is not None:
+            queryset = queryset.filter(Q(first_name__contains=search) | Q(last_name__contains=search))
+        return queryset
 
 
 class ToggleFollow(GenericAPIView):
@@ -60,5 +60,27 @@ class FollowingList(ListAPIView):
     def get_queryset(self):
         return User.objects.filter(followers=self.request.user.id)
 
+    serializer_class = ListUserSerializer
+    permission_classes = [IsAuthenticated]
+
+
+class RetrieveUpdateDestroyMyUserView(RetrieveUpdateDestroyAPIView):
+    serializer_class = ListUserSerializer
+    permission_classes = [IsOwnerOrReadOnly]
+
+    def get_object(self):
+        return self.request.user
+
+    def perform_update(self, serializer):
+        if "things_user_likes" in self.request.data:
+            things_user_likes = self.request.data["things_user_likes"][1: len(self.request.data["things_user_likes"]) - 1]
+            serializer.save(things_user_likes=things_user_likes)
+        else:
+            serializer.save()
+
+
+class RetrieveUserView(RetrieveAPIView):
+    queryset = User.objects.all()
+    lookup_field = 'pk'
     serializer_class = ListUserSerializer
     permission_classes = [IsAuthenticated]

@@ -1,10 +1,10 @@
 from django.urls import path
 
-from friend_request.views import ListMyFriendsView, ListMyFriendRequestsView, \
-    CreateFriendRequestsView, RetrieveUpdateDestroyFriendRequestView
+from friend_request.views import ListMyFriendRequestsView, \
+    CreateFriendRequestsView, RetrieveUpdateDestroyFriendRequestView, ListFriendsView
 
 urlpatterns = [
-    path('', ListMyFriendsView.as_view()),
+    path('', ListFriendsView.as_view()),
     path('requests/', ListMyFriendRequestsView.as_view()),
     path('requests/<int:id>/',
          RetrieveUpdateDestroyFriendRequestView.as_view()),
