@@ -59,13 +59,27 @@ const Posts = () => {
     
     }, [])
 
+    const deleteByID = async (id) => {
+        const headers = new Headers({
+            "Authorization": `Bearer ${localStorage.getItem("token")}`
+        })
+    
+        const config = {
+            method: "DELETE",
+            headers
+        }
+        const url = `https://motion.propulsion-home.ch/backend/api/social/posts/${id}`;
+        const res = await fetch(url, config);
+        console.log(res)
+    }
+
     return (
         <>
             <Header/>
             <Main>
                 <Wrapper>
                     <Search/>
-                    <MainWall first_name={firstName} posts={posts.results} avatar={avatar} />
+                    <MainWall deleteByID={deleteByID} first_name={firstName} posts={posts.results} avatar={avatar} />
                 </Wrapper>
             </Main>
         </>

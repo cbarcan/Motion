@@ -7,6 +7,7 @@ import Popup from "reactjs-popup";
 import avatar from "../../assets/svgs/avatar.svg"; 
 import edit from "../../assets/svgs/edit.svg"; 
 import garbage from "../../assets/svgs/garbage.svg" ; 
+import React, { useEffect, useState } from "react";
 
 
 const PostContainer = styled.div `
@@ -64,12 +65,88 @@ const MenuContainer = styled.div `
     img {
         height: 15px;
     }
-
-    button {
-        
-    }
+    :hover {
+                cursor: pointer;
+            }
 
 `
+
+const DeleteBackground= styled.div`
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    width: 100vw;
+    background: #00000096;
+` 
+
+const DeleteContainer = styled.div`
+    position: relative;
+    height: 300px;
+    width: 500px;
+    color: black;
+    display: flex;
+    flex-direction: column;
+    box-sizing: border-box;
+    background: white;
+    box-shadow: -2px 0px 24px 4px #0000008b;
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+
+    .editBottomLeft{
+
+        width: 100%;
+        display: flex;
+        justify-content: center;
+
+
+
+        .saveButton{
+            background: ${props => props.theme.motionColor}; 
+            height: 48px;
+            width: 150px;
+            border-radius: 30px;
+            border: 1px solid #00000028;
+            color: white;
+            margin: 10px;
+            
+            :hover {
+                cursor: pointer;
+            }
+            
+            :active {
+                transform: translateY(2px);
+            }
+
+            font-size: 10px;
+            line-height: 12px;
+            letter-spacing: 0.833333px;
+        }
+        .whiteButton{
+            height: 48px;
+            width: 150px;
+            border-radius: 30px;
+            border: 1px solid #00000028;
+            color: black;
+            margin: 10px;
+
+            
+            :hover {
+                cursor: pointer;
+            }
+            
+            :active {
+                transform: translateY(2px);
+            }
+
+            font-size: 10px;
+            line-height: 12px;
+            letter-spacing: 0.833333px;
+        }
+    }
+    
+`  
 
 const FeedPic = styled.div `
 
@@ -124,6 +201,7 @@ const LikeShare = styled.div `
         align-content: center;
 
 
+
         button {
             font-size: 12px; 
             border: none; 
@@ -154,10 +232,8 @@ const LikeShare = styled.div `
 
 const  Post = (props) => {
 
-    if (props.post.user.first_name === props.me) {
-        console.log('my post')
-    }
 
+    // TODO: close modal with YES/NO
 
     return ( 
     <PostContainer>
@@ -170,16 +246,32 @@ const  Post = (props) => {
                 <p>{moment(props.post.created).calendar()}</p>
             </NameTime>
             {(props.post.user.first_name === props.me) &&
-                <Popup trigger={() => (<MenuContainer><img src={menu} alt="menu"/></MenuContainer>)} 
-                    position={[ "right center", 'bottom right', 'bottom left']}
-                    closeOnDocumentClick 
-                >
-                    <EditandDelete>
-                        <p><img src={edit} alt="edit"/>Edit</p>
-                        <p><img src={garbage} alt="garbage"/>Delete</p>
-                    </EditandDelete>   
-                </Popup>
+            <Popup trigger={() => (<MenuContainer><img src={menu} alt="menu"/></MenuContainer>)} 
+            position={"right center"}
+            closeOnDocumentClick={false}
+            > 
+                <EditandDelete>
+                    <p><img src={edit} alt="edit"/>Edit</p>
+                    <Popup trigger={<p><img src={garbage} alt='garbage'/>Delete</p>} modal nested>
+                    {close => (
+                        <DeleteBackground> 
+                            <DeleteContainer>
+                                <img id='circle-icon' src={garbage} alt='garbage'/>
+                                Are you sure you want to do this?
+                                <div className='editBottomLeft'>
+                                    <button onClick={() => {close()}} className='whiteButton'>NO</button>
+                                    <button onClick={() => {
+                                        props.deleteByID(props.post.id)
+                                        close()
+                                        }} className='saveButton'>YES</button>
+                                </div>
+                            </DeleteContainer>
+                        </DeleteBackground>)}
+                    </Popup>
+                </EditandDelete>
+            </Popup>
             }
+
         </Comment>
         <p>{props.post.content}</p>
         {
