@@ -16,7 +16,7 @@ class RegistrationView(CreateAPIView):
     permission_classes = []
 
     def post(self, request, *args, **kwargs):
-        new_user = User(email=request.data['email'], username='username', is_active=False)
+        new_user = User(email=request.data['email'], username=request.data['email'], is_active=False)
         new_user.save()
         new_registration = Registration(user=new_user)
         new_registration.save()
