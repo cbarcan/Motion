@@ -30,9 +30,10 @@ const SignUpButton= styled.button `
 `
 const SignIn = () => {
 
+    const dispatch = useDispatch();
+
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
-    const dispatch = useDispatch();
     const history = useHistory();
     const [error, setError] = useState(false);
     const [errorMsg, setErrorMsg] = useState('');
@@ -70,6 +71,8 @@ const SignIn = () => {
         }
 
         dispatch(action);
+
+        console.log(resData)
 
         localStorage.setItem("token", resData.access);
         localStorage.setItem("profilePic", resData.user.avatar)
