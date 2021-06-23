@@ -18,7 +18,7 @@ class UserAdmin(UserAdmin):
         (None, {'fields': ('email', 'username', 'password')}),
         ('Personal info', {'fields': (
             'first_name', 'last_name', 'about_me', 'phone_number', 'location',
-            'job', 'avatar', 'banner', 'things_user_likes', "following")}),
+            'job', 'avatar', 'banner', 'things_user_likes', "following", "friends")}),
         ('Permissions', {'fields': (
             'is_active', 'is_staff', 'is_superuser', 'user_permissions')}),
         ('Important dates', {'fields': ('last_login', 'date_joined')}),

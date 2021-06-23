@@ -32,6 +32,7 @@ class User(AbstractUser):
                                        symmetrical=False,
                                        related_name="followers")
     friends = models.ManyToManyField(to="self", blank=True)
+    rejected = models.ManyToManyField(to="self", blank=True)
 
     def __str__(self):
         return self.username
