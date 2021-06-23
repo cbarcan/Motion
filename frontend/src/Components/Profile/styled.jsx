@@ -245,3 +245,80 @@ export const BoxBottomRight = styled.div`
         flex-direction: column;
     }
 `
+export const Main = styled.div`
+    width: 100%;
+    height: fit-content;
+    margin-top: 80px;
+    display: flex;
+    background: #F2F2F2;
+    justify-content: center;
+    align-items: center;
+    border: green solid 2px;
+`
+
+export const FriendsStuff = styled.div`
+    height: 500px;
+    width: 100%;
+    display: flex;
+    border: 5 solid black;
+    margin-top: 320px;
+    padding-right: 10%;
+    padding-left: 10%;
+    padding-top: 15%;
+`
+
+
+export const Users = styled.div`
+    height: 100%;
+    width: 90%;
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    align-items: center;
+    margin: 2% 0;
+`
+export const Wrapper = styled.div`
+    height: 100%;
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    
+`
+export const Buttons = styled.div`
+    height: 100px;
+    width: 100%;
+    display: flex;
+    justify-content: space-around;
+
+    button {
+        height: 40px;
+        width: 20%;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        font-weight: 500;
+        font-size: 10px;
+        line-height: 12px;  
+        margin: 0 2%;
+        background: inherit;
+        border: 1px solid rgba(0, 0, 0, 0.2);
+        box-shadow: 0px 10px 30px rgba(0, 0, 0, 0.07);
+        border-radius: 30px;
+
+        &.isFallowing {
+            background: ${props => props.theme.motionColor};
+            color: white;
+            border: none;
+        }
+    
+        :hover {
+            cursor: pointer;
+        }
+
+        :active {
+            transform: translateY(2px);
+        }
+    }
+`
