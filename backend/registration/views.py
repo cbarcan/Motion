@@ -1,23 +1,15 @@
 from django.contrib.auth import get_user_model
-# from django.core.mail import send_mail
+from django.core.mail import send_mail
 from django.http import HttpResponse
 from rest_framework.generics import CreateAPIView, UpdateAPIView
 from rest_framework.response import Response
 
-from registration.models import Registration
-from registration.serializers import RegistrationSerializer, ValidationSerializer
+from .models import Registration
+from .serializers import RegistrationSerializer, ValidationSerializer
+from ..motion_backend.settings import DEFAULT_FROM_EMAIL
 
 User = get_user_model()
 
-
-# class RegisterUserView(CreateAPIView):
-#     send_mail(
-#         'Subject here',
-#         'Here is the message.',
-#         'from@example.com',
-#         ['to@example.com'],
-#         fail_silently=False,
-#     )
 
 class RegistrationView(CreateAPIView):
     serializer_class = RegistrationSerializer
@@ -28,6 +20,13 @@ class RegistrationView(CreateAPIView):
         new_user.save()
         new_registration = Registration(user=new_user)
         new_registration.save()
+        send_mail(
+            'Thank you for signing up for Motion!',
+            f'Here is your e-mail validation code: {new_registration.code}. You will need it to create a new profile.',
+            DEFAULT_FROM_EMAIL,
+            [request.data['email']],
+            fail_silently=False,
+        )
         return HttpResponse(status=201)
 
 
