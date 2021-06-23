@@ -6,7 +6,7 @@ from rest_framework.response import Response
 
 from registration.models import Registration, code_generator
 from registration.serializers import RegistrationSerializer, ValidationSerializer
-from ..motion_backend.settings import DEFAULT_FROM_EMAIL
+from motion_backend.settings import DEFAULT_FROM_EMAIL
 
 User = get_user_model()
 
@@ -75,11 +75,22 @@ class PasswordResetView(CreateAPIView):
             registration.code = new_code
             registration.is_used = False
             registration.save()
-            # send email with new_code
+            send_mail(
+                'Motion password reset',
+                f'Here is your password reset code: {new_code}. You will need it to change your password.',
+                DEFAULT_FROM_EMAIL,
+                [request.data['email']],
+                fail_silently=False,
+            )
         else:
             registration.save()
-            pass
-            # send email with registration.code
+            send_mail(
+                'Thank you for signing up for Motion!',
+                f'Here is your e-mail validation code: {registration.code}. You will need it to create a new profile.',
+                DEFAULT_FROM_EMAIL,
+                [request.data['email']],
+                fail_silently=False,
+            )
         return HttpResponse(status=201)
 
 
