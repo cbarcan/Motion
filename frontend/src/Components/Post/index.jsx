@@ -9,7 +9,7 @@ import edit from "../../assets/svgs/edit.svg";
 import garbage from "../../assets/svgs/garbage.svg" ; 
 
 
-const JenPic = styled.div `
+const PostContainer = styled.div `
     background-color: white;
     box-shadow: -2px 0px 24px 4px rgba(0,0,0,0.12);
     margin-top: 24px; 
@@ -33,7 +33,7 @@ const Comment = styled.div `
 
 const ImgWrapper = styled.div `
 
-     img {
+    img {
             width: 40px;
             height: 40px;
             margin-right: 20px;
@@ -55,18 +55,22 @@ const NameTime = styled.div `
         flex-direction: column; 
     }
 `
-const MenuIcon = styled.img `
+
+const MenuContainer = styled.div `
+
+    margin-left: auto;
+    margin-right: 10px;
+
+    img {
         height: 15px;
+    }
+
+    button {
+        
+    }
+
 `
-const MenuButton =styled.button `
-    height: 15px;
-        margin-top: 11px;
-        margin-left: 59%;
-        padding-right: 10;
-        margin-right: 2px; 
-        background-color: none;
-        border: none; 
-`
+
 const FeedPic = styled.div `
 
     display: grid;
@@ -74,7 +78,7 @@ const FeedPic = styled.div `
 
     img {
         width: 100%;
-        }      
+    }      
 `
 
 const EditandDelete = styled.div `
@@ -95,7 +99,6 @@ const EditandDelete = styled.div `
                 background-color: whitesmoke;
             }
 
-           
         }
 
         img {
@@ -105,46 +108,45 @@ const EditandDelete = styled.div `
             margin-right: 20px; 
             font-size: 12px;
             
-           
+
 
             :hover {
                 cursor: pointer;
             }
 
-           
+        
         }
 `
 const LikeShare = styled.div `
 
         display: flex;
-        align-items: center;
         justify-content: center;
-        margin-top: 16px;
-        height: 50px; 
+        align-content: center;
+
 
         button {
-            margin-top: 0;
-            margin-bottom: 0;
-            margin-right: 30px;
-            margin-left: 10px;
             font-size: 12px; 
             border: none; 
             background-color: transparent;
+            margin-right: 10px;
+            margin-left: 10px;
 
-                :hover {
-                cursor: pointer;
-                }
+            :hover {
+            cursor: pointer;
+            }
 
-                :active {
-                transform: translateY(2px);
-                }
+            :active {
+            transform: translateY(2px);
+            }
+
+            img {
+                margin-right: 10px;
+            }
         }
 
         p {
-            margin-top: 0;
-            margin-bottom: 0;
-            margin-left: 170px;
-            margin-right: 20px;
+            margin-left: auto;
+            margin-right: 10px;
             font-size: 12px;
             color: rgb(119, 119, 119); 
         }
@@ -152,25 +154,32 @@ const LikeShare = styled.div `
 
 const  Post = (props) => {
 
+    if (props.post.user.first_name === props.me) {
+        console.log('my post')
+    }
+
+
     return ( 
-    <JenPic>
+    <PostContainer>
         <Comment>
-        <ImgWrapper>
-            <img src={props.post.user.avatar ? props.post.user.avatar : avatar} alt="avatar"/>
-        </ImgWrapper>
+            <ImgWrapper>
+                <img src={props.post.user.avatar ? props.post.user.avatar : avatar} alt="avatar"/>
+            </ImgWrapper>
             <NameTime>
                 <h5>{props.post.user.username}</h5>
                 <p>{moment(props.post.created).calendar()}</p>
             </NameTime>
-            <Popup trigger={() => (<MenuButton><MenuIcon src={menu}/> </MenuButton>)} 
-            position={[ "right center", 'bottom right', 'bottom left']}
-            closeOnDocumentClick 
-           >
-            <EditandDelete>
-                <p><img src={edit} alt="edit"/>Edit</p>
-                <p><img src={garbage} alt="garbage"/>Delete</p>
-            </EditandDelete>   
-            </Popup>
+            {(props.post.user.first_name === props.me) &&
+                <Popup trigger={() => (<MenuContainer><img src={menu} alt="menu"/></MenuContainer>)} 
+                    position={[ "right center", 'bottom right', 'bottom left']}
+                    closeOnDocumentClick 
+                >
+                    <EditandDelete>
+                        <p><img src={edit} alt="edit"/>Edit</p>
+                        <p><img src={garbage} alt="garbage"/>Delete</p>
+                    </EditandDelete>   
+                </Popup>
+            }
         </Comment>
         <p>{props.post.content}</p>
         {
@@ -180,11 +189,11 @@ const  Post = (props) => {
         </FeedPic>
         }
         <LikeShare>                                    
-                <button>{props.post.user.amount_of_likes}<img src={ heart } alt= "heart_icon"/>Like</button>
+                <button><img src={ heart } alt= "heart_icon"/>Like</button>
                 <button><img src={ share } alt="share_icon"/>Share</button>
                 <p>{props.post.amount_of_likes} Likes</p>
         </LikeShare>
-    </JenPic>)
+    </PostContainer>)
 }
 
 export default Post; 

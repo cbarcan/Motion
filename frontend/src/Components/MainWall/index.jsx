@@ -133,7 +133,7 @@ return (
                                 </span>
                             </Popup>
                         </CreateNewPost>
-                        {props.posts && props.posts.map((post)=> <Post key={post.id} post={post}/>)}
+                        {props.posts && props.posts.map((post)=> <Post key={post.id} post={post} me={props.first_name}/>)}
                         </Masonry>       
                 </LeftWall>
             </Wall>           
