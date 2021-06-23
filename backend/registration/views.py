@@ -53,6 +53,9 @@ class ValidationView(UpdateAPIView):
                     user.last_name = request.data['last_name']
                 user.is_active = True
                 user.save()
+                registration = user.registration
+                registration.is_used = True
+                registration.save()
                 serializer = self.get_serializer(user)
                 return Response(serializer.data)
             else:
