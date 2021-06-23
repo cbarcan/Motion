@@ -1,9 +1,10 @@
-import React, { useState } from 'react'
+import React, { useState, useEffect, useRef } from 'react'
 import { useDispatch } from 'react-redux'
 import styled from 'styled-components';
 import Send from '../../assets/images/send_button.png';
 import ImageIcon from '../../assets/svgs/gallery.svg';
 import FileIcon from '../../assets/svgs/upload.svg';
+
 
 const BiggerContainer = styled.div`
 display: flex;
@@ -159,6 +160,14 @@ const PostInput = styled.textarea`
 
 const NewPost = (props) => {
 
+    const inputCursor = useRef(null)
+
+
+    useEffect (() => {
+        // hack to move the cursor to the end of the text
+        inputCursor.current.setSelectionRange(postText.length, postText.length)
+    }, [])
+
     const [postPic, setPostPic] = useState([]);
     const [postText, setPostText] = useState(props.initialText);
     const dispatch = useDispatch();
@@ -236,7 +245,7 @@ const NewPost = (props) => {
         <NewPostContainer>
             <NewPostTopContainer>
                 <img src={props.avatar} alt='profile'/>
-                <PostInput onChange={postInputHandler} value={postText} type="text" placeholder={`What’s on your mind, ${props.first_name}?`}></PostInput>
+                <PostInput ref={inputCursor} onChange={postInputHandler} value={postText} type="text" placeholder={`What’s on your mind, ${props.first_name}?`}></PostInput>
             </NewPostTopContainer>
             <NewPostMiddleContainer>
                 {
