@@ -1,5 +1,5 @@
 from django.contrib.auth import get_user_model
-from django.core.mail import send_mail
+# from django.core.mail import send_mail
 from django.http import HttpResponse
 from rest_framework.generics import CreateAPIView, UpdateAPIView
 from rest_framework.response import Response
