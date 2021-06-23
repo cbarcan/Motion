@@ -10,7 +10,6 @@ import { useDispatch } from 'react-redux';
 
 
 const ThingsILikeContainer = styled.div`  
-    border: red solid 2px;
     display: flex;
     flex-direction: column;
 
@@ -28,21 +27,16 @@ const ThingsILikeContainer = styled.div`
 `
 
 const ThingsILike = styled.div`
-    border: green solid 2px;
     display: flex;
     flex-wrap: wrap;
-    flex-direction: column;
     justify-items: start;
     align-items: space-between;
-    margin-right: 50px;
-    height: 130px;
+    height: 100px;
 
     .thingILike {    
-        border: blue solid 2px; 
-        z-index: 1;
+        border: none; 
         border-radius: 20px;
         box-shadow: rgba(0, 0, 0, 0.15) 1.95px 1.95px 2.6px;
-        border: none;
         margin: 5px;
         padding: 8px 15px 8px 15px;
         width: max-content;
@@ -52,30 +46,31 @@ const ThingsILike = styled.div`
     }
 `
 
-const addThingYouLikeContainer = styled.div`
-    
-        border: pink dotted 5px;
+const TypeSomethingAdd = styled.div`
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: flex-end;
+    height: 40px;
+    border-bottom: 2px solid grey;
 
-        display: flex;
-        flex-direction: row;
-        justify-content: space-between;
-        align-items: flex-end;
-        height: 30px;
-        
-            #addThingYouLikeInput{
-            border: none;
-            padding: 0px 0px 10px 0px;
-        }
 
-            #addThingYouLikeButton{
-            padding: 10px 30px 10px 30px;
-            text-align: center;
-            border-radius: 25px;
-            border: none; 
-            box-shadow: rgba(0, 0, 0, 0.15) 1.95px 1.95px 2.6px;
-            background-color: white;
-            cursor: pointer;
-        }
+    input{
+        border: none;
+        padding: 0px 0px 10px 0px;
+    }
+
+    button{
+        padding: 10px 30px 10px 30px;
+        text-align: center;
+        border-radius: 25px;
+        border: #a8a6a6; 
+        box-shadow: rgba(0, 0, 0, 0.15) 1.95px 1.95px 2.6px;
+        background-color: white;
+        cursor: pointer;
+    }
+
+
 `
 
 
@@ -105,11 +100,7 @@ const ValidationWrapper = styled.div`
         width: 80%;
     }
 
-    #hobby {
-        ::placeholder{
-            opacity: 0.2;
-        }
-    }
+    
 
     button {
         height: 40px;
@@ -136,52 +127,21 @@ const ValidationWrapper = styled.div`
     }
 `
 
-const Hobbies = styled.div`
-    height: 76px;
-    width: 100%;
-    display: flex;
-    flex-wrap: wrap;
-    align-items: center;
-`
 
-const Banner = styled.img`
+
+const Banner = styled.div`
     background-image: url(${(props) => props.banner});
     position: absolute;
-    width: 1442px;
+    width: 100%;
     height: 320px;
-    left: 0px;
-    top: 0px;
-    z-index: -1;
-`
-
-const Hobby = styled.p`
-    height: 32px;
-    width: fit-content;
-    background: rgba(0,0,0,0.05);
-    border: 1px solid rgba(0,0,0,0.05);
-    border-radius: 18px;
     display: flex;
-    justify-content: center;
-    align-items: center;
-    color: black;
-    padding: 0 10px;
-    cursor: default;
-    margin: 1% 1%;
-    
-    button {
-        margin-left: 10px;
-        border: none;
-        background: none;
+    justify-content: flex-end;
+    align-items: flex-end;
 
-        :hover {
-            cursor: pointer;
-        }
-
-        :active {
-            transform: translateY(2px);
-        }
+    img {
+        width:20px;
+        height:40px;
     }
-    
 `
 
 
@@ -329,6 +289,7 @@ const ProfileEdit = () => {
           setAbout(resData.about_me);
           setThingsUserLikes(resData.things_user_likes);
           setAvatar(resData.avatar);
+          setBanner(resData.banner);
         }
         fetchUsers()
     }, [])
@@ -417,99 +378,99 @@ const ProfileEdit = () => {
     return (
         <>
             <Header />
-            <Main>
-                <Banner banner={banner}></Banner>
-                <ProfileEditBox>
-                    <EditBoxLeft>
-                        <p id="updateBackgroundText" onClick={openImageSelector}>Update background image</p>
-                        <input name="updateBackgroundInput"  hidden type="file" accept="image/png, image/jpeg"  ref={fileRefBanner} onChange={updateBackgroundHandler} id="updateBackgroundInput" />
-                        <div className='editTopLeft'>
-                            <img src={avatar} alt='profile'/>
-                            <button onClick={open} className='whiteButton'>UPDATE IMAGE</button>
-                            {isOpen && <div className='popup'>
-                                <label htmlFor='file-upload' className='fileUpload'>Upload file</label>
-                                <input id='file-upload' type='file' className='fileInput' onChange={avatarHandler}/>
-                                <button className='whiteButton' >Remove</button>
-                            </div>
-                           }
+            <Banner banner={banner}>
+                <img onClick={openImageSelector} src="http://simpleicon.com/wp-content/uploads/camera.svg" alt="camera"/>
+                <p onClick={openImageSelector} >Update Image</p>
+            </Banner>
+            <ProfileEditBox>
+                <EditBoxLeft>                  
+                    <input name="updateBackgroundInput"  hidden type="file" accept="image/png, image/jpeg"  ref={fileRefBanner} onChange={updateBackgroundHandler} id="updateBackgroundInput" />
+                    <div className='editTopLeft'>
+                        <img src={avatar} alt='profile'/>
+                        <button onClick={open} className='whiteButton'>UPDATE IMAGE</button>
+                        {isOpen && <div className='popup'>
+                            <label htmlFor='file-upload' className='fileUpload'>Upload file</label>
+                            <input id='file-upload' type='file' className='fileInput' onChange={avatarHandler}/>
+                            <button className='whiteButton' >Remove</button>
                         </div>
-                        <div className='editBottomLeft'>
-                            <button onClick={onDelete} className='whiteButton'>DELETE ACCOUNT</button>
-                            <button onClick={onSubmitHandler} className='saveButton'>SAVE</button>
-                        </div>
-                    </EditBoxLeft>
-                    <EditBoxRight>
-                        <ValidationWrapper>
-                            <InputWrapper className="input">                        
-                                <EmailWrapper>
-                                    <p>First name</p> 
-                                    <Input name="firstName" type="text" id='firstName' value={firstName} onChange={changeFirstNameHandler}/>
-                                </EmailWrapper>
-                            </InputWrapper>
-                            <InputWrapper className="input">
-                                <EmailWrapper>
-                                    <p>Last Name</p>
-                                    <Input name="lastName" type="text" id='lastName' value={lastName} onChange={changeLastNameHandler}/>
-                                </EmailWrapper>
-                            </InputWrapper>
-                        </ValidationWrapper>
-                        <ValidationWrapper>
-                            <InputWrapper className="input">                        
-                                <EmailWrapper>
-                                    <p>Email</p> 
-                                    <Input name="Email" type="text" id='email' value={email} onChange={changeEmailHandler} />
-                                </EmailWrapper>
-                            </InputWrapper>
-                            <InputWrapper className="input">
-                                <EmailWrapper>
-                                    <p>Username</p>
-                                    <Input name="Username" type="text" id='username' value={userName} onChange={changeUserNameHandler} />
-                                </EmailWrapper>
-                            </InputWrapper>
-                        </ValidationWrapper>
-                        <ValidationWrapper>
-                            <InputWrapper className="input">                        
-                                <EmailWrapper>
-                                    <p>Location</p> 
-                                    <Input name="Location" type="text" id='location' value={location} onChange={changeLocationHandler} />
-                                </EmailWrapper>
-                            </InputWrapper>
-                            <InputWrapper className="input">
-                                <EmailWrapper>
-                                    <p>Phone</p>
-                                    <Input name="123-456-7890" type="text" id='phone' readOnly/>
-                                </EmailWrapper>
-                            </InputWrapper>
-                        </ValidationWrapper>
-                        <ValidationWrapper>
-                            <InputWrapper className="input">                        
-                                <EmailWrapper>
-                                    <p>About me</p> 
-                                    <Input name="About me" type="text" id='aboutMe' value={about} onChange={changeAboutHandler} />
-                                </EmailWrapper>
-                            </InputWrapper>
-                            <InputWrapper className="input">
-                                <EmailWrapper>
-                                    <p>Password</p>
-                                    <Input name="Password" type="password" id='password'/>
-                                </EmailWrapper>
-                            </InputWrapper>                            
-                        </ValidationWrapper>
-                        <ThingsILikeContainer>
-                            <p>Things I like</p>
-                            <ThingsILike>
-                                {(thingsUserLikes && thingsUserLikes.length!==0)?
-                                thingsUserLikes.map(activity => <div className="thingILike" key={activity+Math.random()*100000000}>{activity}<button onClick={()=>removeThingUserLikesHandler(activity)} id="removeThingUserLikes">X</button></div>)
-                                :null}
-                            </ThingsILike>
-                            <addThingYouLikeContainer>
-                                <input id="addThingYouLikeInput"  onChange={currentThingUserLikesHandler} maxLength="20" value={currentThingUserLikes} type="text" placeholder="Type something.."></input>
-                                <button onClick={addCurrentThingUserLikesHandler} id="addThingYouLikeButton">ADD</button>
-                            </addThingYouLikeContainer>
-                        </ThingsILikeContainer>
-                    </EditBoxRight>
-                </ProfileEditBox>
-            </Main>
+                        }
+                    </div>
+                    <div className='editBottomLeft'>
+                        <button onClick={onDelete} className='whiteButton'>DELETE ACCOUNT</button>
+                        <button onClick={onSubmitHandler} className='saveButton'>SAVE</button>
+                    </div>
+                </EditBoxLeft>
+                <EditBoxRight>
+                    <ValidationWrapper>
+                        <InputWrapper className="input">                        
+                            <EmailWrapper>
+                                <p>First Name</p> 
+                                <Input name="firstName" type="text" id='firstName' value={firstName} onChange={changeFirstNameHandler}/>
+                            </EmailWrapper>
+                        </InputWrapper>
+                        <InputWrapper className="input">
+                            <EmailWrapper>
+                                <p>Last Name</p>
+                                <Input name="lastName" type="text" id='lastName' value={lastName} onChange={changeLastNameHandler}/>
+                            </EmailWrapper>
+                        </InputWrapper>
+                    </ValidationWrapper>
+                    <ValidationWrapper>
+                        <InputWrapper className="input">                        
+                            <EmailWrapper>
+                                <p>Email</p> 
+                                <Input name="Email" type="text" id='email' value={email} onChange={changeEmailHandler} />
+                            </EmailWrapper>
+                        </InputWrapper>
+                        <InputWrapper className="input">
+                            <EmailWrapper>
+                                <p>Username</p>
+                                <Input name="Username" type="text" id='username' value={userName} onChange={changeUserNameHandler} />
+                            </EmailWrapper>
+                        </InputWrapper>
+                    </ValidationWrapper>
+                    <ValidationWrapper>
+                        <InputWrapper className="input">                        
+                            <EmailWrapper>
+                                <p>Location</p> 
+                                <Input name="Location" type="text" id='location' value={location} onChange={changeLocationHandler} />
+                            </EmailWrapper>
+                        </InputWrapper>
+                        <InputWrapper className="input">
+                            <EmailWrapper>
+                                <p>Phone</p>
+                                <Input name="123-456-7890" type="text" id='phone' readOnly/>
+                            </EmailWrapper>
+                        </InputWrapper>
+                    </ValidationWrapper>
+                    <ValidationWrapper>
+                        <InputWrapper className="input">                        
+                            <EmailWrapper>
+                                <p>About me</p> 
+                                <Input name="About me" type="text" id='aboutMe' value={about} onChange={changeAboutHandler} />
+                            </EmailWrapper>
+                        </InputWrapper>
+                        <InputWrapper className="input">
+                            <EmailWrapper>
+                                <p>Password</p>
+                                <Input name="Password" type="password" id='password'/>
+                            </EmailWrapper>
+                        </InputWrapper>                            
+                    </ValidationWrapper>
+                    <ThingsILikeContainer>
+                        <p>Things I like!!!</p>
+                        <ThingsILike>
+                            {(thingsUserLikes && thingsUserLikes.length!==0)?
+                            thingsUserLikes.map(activity => <div className="thingILike" key={activity+Math.random()*100000000}>{activity}<button onClick={()=>removeThingUserLikesHandler(activity)} id="removeThingUserLikes">X</button></div>)
+                            :null}
+                        </ThingsILike>
+                        <TypeSomethingAdd>
+                            <input onChange={currentThingUserLikesHandler} maxLength="20" value={currentThingUserLikes} type="text" placeholder="Type something.."></input>
+                            <button onClick={addCurrentThingUserLikesHandler}>ADD</button>
+                        </TypeSomethingAdd>
+                    </ThingsILikeContainer>
+                </EditBoxRight>
+            </ProfileEditBox>
         </>
     )
 }
