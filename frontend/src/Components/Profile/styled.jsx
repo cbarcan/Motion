@@ -1,10 +1,9 @@
 import styled from "styled-components";
-import backgroundIMG from '../../assets/images/ProfileBackground.png'
 
 export const BackgroundImg = styled.img`
-    background-image: url(${backgroundIMG});
+    background-image: url(${props => props.backgroundIMG});
     position: absolute;
-    width: 1442px;
+    width: 100%;
     height: 320px;
     left: 0px;
     top: 0px;
@@ -14,10 +13,11 @@ export const BackgroundImg = styled.img`
 
 export const ProfileBox = styled.div`
     position: absolute;
-    width: 1152px;
+    width: 80vw;
     height: 400px;
-    left: 144px;
     top: 200px;
+    margin-left: 10vw;
+
     background: #FFFFFF;
     box-shadow: 0px 0px 1px rgba(0, 0, 0, 0.2), 0px 10px 20px rgba(0, 0, 0, 0.05);
     border-radius: 4px;

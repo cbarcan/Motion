@@ -5,9 +5,9 @@ import styled from "styled-components";
 export const ProfileEditBox = styled.div`
     position: absolute;
     top: 200px;
-    width: 1152px;
+    width: 80vw;
     height: 730px;
-    left: 144px;
+    left: 10vw;
     /* right: 144px; */
     background: #FFFFFF;
     box-shadow: 0px 0px 1px rgba(0, 0, 0, 0.2), 0px 10px 20px rgba(0, 0, 0, 0.05);
@@ -17,7 +17,7 @@ export const ProfileEditBox = styled.div`
 
 export const EditBoxLeft = styled.div`
     height: 730px;
-    width: 319px;
+    width: 30%;
     border-right: #00000014 solid 1px;
     display: flex;
     flex-direction: column;
@@ -135,7 +135,7 @@ export const EditBoxLeft = styled.div`
 `
 export const EditBoxRight = styled.div`
     height: 730px;
-    width: 833px;
+    width: 70%;
     border-right: #00000014 solid 5px;
     display: flex;
     flex-direction: column;
