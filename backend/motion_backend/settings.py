@@ -47,6 +47,7 @@ INSTALLED_APPS = [
     'user',
     'friend_request',
     'comment',
+    'registration',
 ]
 
 MIDDLEWARE = [
