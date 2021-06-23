@@ -25,8 +25,10 @@ SECRET_KEY = 'django-insecure-0t6-!33ug!qcvk5gya&sl&*pute7tq_)d&jug2zptehn0@(f1e
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = ast.literal_eval(os.environ.get('DJANGO_DEBUG'))
+# DEBUG = True
 
 ALLOWED_HOSTS = ["*"]
+# ALLOWED_HOSTS = []
 
 # Application definition
 
@@ -43,7 +45,9 @@ INSTALLED_APPS = [
     # my apps
     'post',
     'user',
-    'friend_request'
+    'friend_request',
+    'comment',
+    'registration',
 ]
 
 MIDDLEWARE = [
@@ -87,6 +91,8 @@ DATABASES = {
         "HOST": os.environ.get('POSTGRES_HOST'),
         "USER": os.environ.get('POSTGRES_USER'),
         "PASSWORD": os.environ.get('POSTGRES_PASSWORD'),
+        # 'ENGINE': 'django.db.backends.sqlite3',
+        # 'NAME': BASE_DIR / 'db.sqlite3',
     }
 }
 
@@ -138,10 +144,11 @@ USE_TZ = True
 
 STATIC_URL = '/static-files/'
 STATIC_ROOT = '/static-files/'
+# STATIC_ROOT = os.path.join(BASE_DIR, 'static-files')
 
 MEDIA_URL = '/media-files/'
 MEDIA_ROOT = '/media-files/'
-
+# MEDIA_ROOT = os.path.join(BASE_DIR, 'media-files')
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/3.2/ref/settings/#default-auto-field

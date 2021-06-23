@@ -15,8 +15,14 @@ User = get_user_model()
 
 
 class ListCreatePostView(ListCreateAPIView):
-    queryset = Post.objects.all()
     permission_classes = [IsAuthenticated]
+
+    def get_queryset(self):
+        queryset = Post.objects.all()
+        search = self.request.query_params.get('search')
+        if search is not None:
+            queryset = queryset.filter(content__contains=search)
+        return queryset
 
     def get_serializer_class(self):
         if self.request.method == 'POST':
@@ -62,7 +68,14 @@ class ListUserFollowingPosts(ListAPIView):
 
     def get_queryset(self):
         return Post.objects.filter(user__in=User.objects.filter(
-                                       followers=self.request.user.id))
+            followers=self.request.user.id))
+
+
+class ListFriendsPosts(ListAPIView):
+    serializer_class = PostSerializer
+
+    def get_queryset(self):
+        return Post.objects.filter(user__in=self.request.user.friends.values("id"))
 
 
 class ListUserPosts(ListAPIView):
