@@ -1,9 +1,10 @@
-import send_button from "../../assets/svgs/send_button.svg";
-import gallery from "../../assets/svgs/gallery.svg"; 
-import upload from "../../assets/svgs/upload.svg"; 
+import React, { useState, useEffect, useRef } from 'react'
+import { useDispatch } from 'react-redux'
 import styled from 'styled-components';
-import Input from '../Input';
-import React from 'react'
+import Send from '../../assets/images/send_button.png';
+import ImageIcon from '../../assets/svgs/gallery.svg';
+import FileIcon from '../../assets/svgs/upload.svg';
+
 
 const BiggerContainer = styled.div`
 display: flex;
@@ -14,7 +15,8 @@ width: 100vw;
 background: #00000096;
 
 ` 
-const JenPostContainer= styled.div `
+
+const NewPostContainer = styled.div`
     position: relative;
     height: 406px;
     width: 560px;
@@ -24,25 +26,25 @@ const JenPostContainer= styled.div `
     box-sizing: border-box;
     background: white;
     box-shadow: -2px 0px 24px 4px #0000008b;
+` 
 
-
-`
-const JenPostTopContainer = styled.div `
+const NewPostTopContainer = styled.div`
     height: 166px;
     margin-top: 40px;
     margin-left: 25px;
     margin-right: 30px;
     display: flex;
-    align-items: center;
-   
-    img{
-        width: 60px;
-        height: 60px;
-        border-radius: 30px;
-    }
-`
+    align-items: flex-start;
 
-const JenPostMiddleContainer =styled.div `
+    img{
+            height: 80px;
+            width: 80px;
+            border-radius: 40px;
+            margin-bottom: 24px;
+        }
+` 
+
+const NewPostMiddleContainer = styled.div`
     height: 144px;
     display: flex;
     align-items: center;
@@ -51,87 +53,220 @@ const JenPostMiddleContainer =styled.div `
     color: black;
     overflow: auto;
     resize: none;
+` 
 
-`
-const JenPostBottomContainer = styled.div `
+const PreviewImage = styled.div`
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    align-items: flex-end;
+    margin: 10px;
+
+
+    background-image: url(${props => props.preview});
+    background-repeat: no-repeat;
+    background-size: contain;
+
+
+    color: black;
+    height: 100%;
+
+    p {
+        margin-bottom: 20px;
+    }
+
+` 
+
+const NewPostBottomContainer = styled.div`
     height: 106px;
     display: flex;
     align-items: center;
     border-top: 1px solid lightgray;
-    justify-content: space-between;
+` 
+
+
+const PostButton= styled.button `
+    background: ${props => props.theme.motionColor}; 
+    border: none;
+    width: 60px;
+    height: 60px;
+    border-radius: 100%;
+    display: flex;
+    justify-content: center;
     align-items: center;
-    margin: 10px;
+    margin-right: 20px; 
+    margin-left: auto;
+    opacity: 0.6;
+    
+    &:hover {
+        cursor: pointer;
+        opacity: 1;
+    }
+
+    &:active {
+        transform: translateY(4px);
+    }
 `
 
-const GalleryUploadBtn = styled.button `
-    border: none; 
-    background-color: white ;
-    margin-left: 20px; 
+const AddFilesButton= styled.button `
+    border: none;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-left: 33px; 
+    opacity: 0.6;
+    background-color: white;
+    
+    &:hover {
+        cursor: pointer;
+        opacity: 1;
+    }
+
+    &:active {
+        transform: translateY(4px);
+    }
 `
 
+const DeleteFileButton= styled.button `
+    border-radius: 100%;
+    width: 20px;
+    height: 20px;
 
-    const SendButton = styled.button `
-
-    background: ${props => props.theme.motionColor};
-        opacity: 0.7;
-        border-radius: 30px;
-        width: 55px;
-        height: 55px;
-        border: none;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        padding-left: 5px;
-        margin-left: 70%;
-
-        :hover {
-            cursor: pointer;
-        }
-
-        :active {
-            transform: translateY(2px);
-        }
     
+    &:hover {
+        cursor: pointer;
+        opacity: 1;
+    }
+
+    &:active {
+        transform: translateY(1px);
+    }
+`
+
+const PostInput = styled.textarea`
+    color: black;
+    font-size: ${props => props.theme.textSizeM}; ;
+    border: none;
+    width: 100%;
+    height: 100%;
+    outline: none;
+    resize: none;
+    margin-left: 25px;
+
+    :hover {
+        cursor: text;
+    }
+`
+
+const NewPost = (props) => {
+
+    const inputCursor = useRef(null)
+
+
+    useEffect (() => {
+        // hack to move the cursor to the end of the text
+        inputCursor.current.setSelectionRange(postText.length, postText.length)
+    }, [])
+
+    const [postPic, setPostPic] = useState([]);
+    const [postText, setPostText] = useState(props.initialText);
+    const dispatch = useDispatch();
+
+    const handlePostPic = (e) => {
+        const postPicArray = [...postPic];
+        for (let pic of e.target.files) {
+            // add pic url to display preview
+            pic.url = URL.createObjectURL(pic);
+            // prevent reupload
+            if (!postPicArray.some(function(o){return o['name'] === pic.name;})) {
+                postPicArray.push(pic);
+            }
+        }
+        setPostPic(postPicArray);
+        e.target.value = null
+    }
+
+
+    const postInputHandler = (event) => {        
+        setPostText(event.target.value);
+    }
+
+    const handleNewPost = async (e) => {
+        e.preventDefault();
+
+        // dispatch action
+        const headers = new Headers({
+            "Authorization": `Bearer ${localStorage.getItem("token")}`
+        })
     
-    `
+        const formData = new FormData();
+        postPic.map(pic => formData.append("images", pic));
+        formData.append("content", postText);
+    
+        const config = {
+            method: "POST",
+            headers,
+            body: formData
+        }
+        
+        const res = await fetch('https://motion.propulsion-home.ch/backend/api/social/posts/', config);
+        const resData = await res.json();
+    
+        const action = {
+            type: 'CREATE_POST',
+            payload: resData
+        };
+    
+        dispatch(action);
 
+        // reset local react state
+        setPostText('');
+        setPostPic([]);
 
-const PopupPost = (props) => {
+    }
 
     const realFileInput = React.useRef(null);
 
-
-    // Button to trigger file selection
     const replaceFileInput = (e) => {
         realFileInput.current.click()
     }
 
-    // File selection event, here you should add files to an array
-    const handlePostPic = (e) => {
-        console.log(e);
+    const deleteFile = (e) => {
+
+        const files = postPic.filter(file => {
+            return file.name !== e.target.name             
+        });
+        setPostPic(files);
     }
 
-    // create another eventlistener for the send button to dispatch
 
-
-return (
-    <BiggerContainer>
-    <JenPostContainer>
-        <JenPostTopContainer>
-            <img src={localStorage.profilePic} alt='profile'/>  
-            <Input name="What’s on your mind, Gian?" type="text" />   
-        </JenPostTopContainer>
-            <JenPostMiddleContainer>    
-            </JenPostMiddleContainer>    
-        <JenPostBottomContainer>
-            <input type="file" style={{display: "none"}} ref={realFileInput} onChange={e => handlePostPic(e)} accept="image/png, image/jpeg" multiple/>
-            <GalleryUploadBtn  onClick={e => replaceFileInput(e)}><img src={gallery} alt='img icon'/></GalleryUploadBtn >
-            <GalleryUploadBtn  onClick={e => replaceFileInput(e)}><img src={upload} alt='img icon'/></GalleryUploadBtn >
-            <SendButton><img src={send_button} alt='send'/></SendButton> 
-        </JenPostBottomContainer>
-        {/* </Jenpost> */}
-    </JenPostContainer>
-    </BiggerContainer>
-)}
-
-export default PopupPost; 
+    return (
+        <BiggerContainer>
+        <NewPostContainer>
+            <NewPostTopContainer>
+                <img src={props.avatar} alt='profile'/>
+                <PostInput ref={inputCursor} onChange={postInputHandler} value={postText} type="text" placeholder={`What’s on your mind, ${props.first_name}?`}></PostInput>
+            </NewPostTopContainer>
+            <NewPostMiddleContainer>
+                {
+                    postPic.map((file, index) => {
+                        return(
+                            <PreviewImage key={index} preview={file.url}>
+                                <DeleteFileButton name={file.name} onClick={deleteFile}>x</DeleteFileButton>
+                                <p>{file.name}</p>
+                            </PreviewImage>
+                        )
+                    })
+                }                
+            </NewPostMiddleContainer>
+            <NewPostBottomContainer>
+                <input type="file" style={{display: "none"}} ref={realFileInput} onChange={e => handlePostPic(e)} accept="image/png, image/jpeg" multiple/>
+                <AddFilesButton onClick={e => replaceFileInput(e)}><img src={ImageIcon} alt='img icon'/></AddFilesButton>
+                <AddFilesButton onClick={e => replaceFileInput(e)}><img src={FileIcon} alt='file icon'/></AddFilesButton>
+                <PostButton onClick={e => handleNewPost(e)}><img src={Send} alt='send button'/></PostButton>
+            </NewPostBottomContainer>
+        </NewPostContainer>
+        </BiggerContainer>
+    )
+}
+export default NewPost
