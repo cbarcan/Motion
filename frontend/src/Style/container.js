@@ -110,5 +110,4 @@ export const Main = styled.div`
     background: #F2F2F2;
     justify-content: center;
     align-items: center;
-    border: green solid 2px;
 `
