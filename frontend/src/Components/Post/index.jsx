@@ -45,6 +45,9 @@ const ImgWrapper = styled.div `
 
 `
 const NameTime = styled.div `
+
+    display: flex;
+    flex-direction: row;
     
     h5 {
         font-size: 12px;
@@ -73,7 +76,7 @@ const MenuContainer = styled.div `
 
 `
 
-const DeleteBackground= styled.div`
+const ModalBackground= styled.div`
     display: flex;
     justify-content: center;
     align-items: center;
@@ -149,6 +152,151 @@ const DeleteContainer = styled.div`
     }
     
 `  
+
+const EditContainer = styled.div`
+    position: relative;
+    width: 500px;
+    color: black;
+    box-sizing: border-box;
+    background: white;
+    box-shadow: -2px 0px 24px 4px #0000008b;
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    padding: 15px;
+
+    .editBottomLeft{
+
+        width: 100%;
+        display: flex;
+        justify-content: center;
+
+
+
+        .saveButton{
+            background: ${props => props.theme.motionColor}; 
+            height: 48px;
+            width: 150px;
+            border-radius: 30px;
+            border: 1px solid #00000028;
+            color: white;
+            margin: 10px;
+            
+            :hover {
+                cursor: pointer;
+            }
+            
+            :active {
+                transform: translateY(2px);
+            }
+
+            font-size: 10px;
+            line-height: 12px;
+            letter-spacing: 0.833333px;
+        }
+        .whiteButton{
+            height: 48px;
+            width: 150px;
+            border-radius: 30px;
+            border: 1px solid #00000028;
+            color: black;
+            margin: 10px;
+
+            
+            :hover {
+                cursor: pointer;
+            }
+            
+            :active {
+                transform: translateY(2px);
+            }
+
+            font-size: 10px;
+            line-height: 12px;
+            letter-spacing: 0.833333px;
+        }
+    }
+    
+`
+
+const PostDetail = styled.div`
+    color: black;
+    font-size: ${props => props.theme.textSizeM}; ;
+    width: 50%;
+
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+
+    textarea {
+        color: black;
+        font-size: ${props => props.theme.textSizeM}; ;
+        border: none;
+        outline: none;
+        resize: none;
+        :hover {
+            cursor: text;
+        }
+        height: auto;
+    }  
+    .saveButton{
+            background: ${props => props.theme.motionColor}; 
+            height: 48px;
+            width: 150px;
+            border-radius: 30px;
+            border: 1px solid #00000028;
+            color: white;
+            margin: 10px;
+            
+            :hover {
+                cursor: pointer;
+            }
+            
+            :active {
+                transform: translateY(2px);
+            }
+
+            font-size: 10px;
+            line-height: 12px;
+            letter-spacing: 0.833333px;
+        } 
+`
+const UserWrapper = styled.div`
+    display: flex;
+    flex-direction: row;
+    img {
+        width: 40px;
+        height: 40px;
+        margin-right: 20px;
+    }
+
+    margin-bottom: 10px;
+`
+
+const Posted = styled.div`
+    h5 {
+        font-size: 12px;
+        flex-direction: column; 
+        }
+
+    p {
+        font-size: 12px;
+        color: rgb(119, 119, 119);
+        margin: 0;
+        flex-direction: column; 
+    }
+`
+
+const ImgDetail = styled.div`
+    color: black;
+    font-size: ${props => props.theme.textSizeM}; ;
+    border: none;
+    width: 50%;
+    height: 100%;
+
+    margin-right: 20px;
+`
+
 
 const FeedPic = styled.div `
 
@@ -236,6 +384,12 @@ const  Post = (props) => {
 
     const [loggedInUserLiked, setLoggedInUserLiked] = useState(props.post.logged_in_user_liked);
     const [amountOfLikes, setAmountOfLikes] = useState(props.post.amount_of_likes);
+    const [postText, setPostText] = useState(props.initialText);
+
+
+    const postInputHandler = (event) => {        
+        setPostText(event.target.value);
+    }
 
     const likePostHandler = async (e) => {
         e.preventDefault();
@@ -281,10 +435,38 @@ const  Post = (props) => {
             closeOnDocumentClick={false}
             > 
                 <EditandDelete>
-                    <p><img src={edit} alt="edit"/>Edit</p>
+                    <Popup trigger={<p><img src={edit} alt='garbage'/>Edit</p>} modal nested>
+                    {close => (
+                        <ModalBackground> 
+                            <EditContainer>
+                                <ImgDetail>
+                                {   
+                                    props.post.images.length !== 0 &&     
+                                    <FeedPic>
+                                        {props.post.images.map((img,index) => <img key={`${index}-${img}`} src= {img.image} alt="post"/>)}
+                                    </FeedPic>
+                                }
+                                </ImgDetail>
+                                <PostDetail>
+                                    <UserWrapper>
+                                        <img src={props.post.user.avatar ? props.post.user.avatar : avatar} alt="avatar"/>
+                                        <Posted>
+                                            <h5>{props.post.user.username}</h5>
+                                            <p>{moment(props.post.created).calendar()}</p>
+                                        </Posted>
+                                    </UserWrapper>
+                                    <textarea onChange={postInputHandler} value={postText} type="text" placeholder={`What’s on your mind, ${props.post.user.first_name}?`}></textarea>
+                                    <button onClick={() => {
+                                        props.updateByID(props.post.id, postText)
+                                        close()
+                                        }} className='saveButton'>SAVE</button>                                
+                                </PostDetail>
+                            </EditContainer>
+                        </ModalBackground>)}
+                    </Popup>
                     <Popup trigger={<p><img src={garbage} alt='garbage'/>Delete</p>} modal nested>
                     {close => (
-                        <DeleteBackground> 
+                        <ModalBackground> 
                             <DeleteContainer>
                                 <img id='circle-icon' src={garbage} alt='garbage'/>
                                 Are you sure you want to do this?
@@ -296,7 +478,7 @@ const  Post = (props) => {
                                         }} className='saveButton'>YES</button>
                                 </div>
                             </DeleteContainer>
-                        </DeleteBackground>)}
+                        </ModalBackground>)}
                     </Popup>
                 </EditandDelete>
             </Popup>
