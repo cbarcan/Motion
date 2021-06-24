@@ -57,7 +57,6 @@ const Wrapper = styled.div`
 `
 
 const NotificationComponent = (props) => {
-    console.log(props);
     const accept = async() => {
         const url = `https://motion.propulsion-home.ch/backend/api/social/friends/requests/${props.request.id}/`;
         const token = `Bearer ${localStorage.getItem("token")}`;   

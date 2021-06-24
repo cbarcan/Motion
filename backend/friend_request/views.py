@@ -15,9 +15,6 @@ from user.serializers import ListUserSerializer
 User = get_user_model()
 
 
-# TODO: prevent duplicate friend requests, remove kwargs
-
-
 class CreateFriendRequestsView(CreateAPIView):
     queryset = FriendRequest.objects.all()
     serializer_class = CreateFriendRequestSerializer
