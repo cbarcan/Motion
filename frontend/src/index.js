@@ -22,7 +22,7 @@ ReactDOM.render(
       <GlobalStyle />
       <Router>
         <Switch>
-          <Route path="/" component={ withAuth(Posts) } exact/>
+          <Route path="/" component={ withAuth(Posts) }/>
           <Route path="/login" component={ Auth }/> 
           <Route path="/signup" component={ SignUp } exact/>          
           <Route path="/find_friends" component={ FindFriends } exact/>

@@ -493,7 +493,7 @@ const  Post = (props) => {
         </FeedPic>
         }
         <LikeShare>                                    
-                <button><img src={loggedInUserLiked ? PurpleHeart : heart} onClick={likePostHandler} alt= "heart_icon"/>Like</button>
+                <button onClick={likePostHandler}><img src={loggedInUserLiked ? PurpleHeart : heart}  alt= "heart_icon"/>Like</button>
 
                 <button><img src={ share } alt="share_icon"/>Share</button>
                 <p>{amountOfLikes} {amountOfLikes > 1 ? 'likes' : 'like' }</p>
