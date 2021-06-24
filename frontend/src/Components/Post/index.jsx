@@ -8,6 +8,8 @@ import avatar from "../../assets/svgs/avatar.svg";
 import edit from "../../assets/svgs/edit.svg"; 
 import garbage from "../../assets/svgs/garbage.svg" ; 
 import React, { useEffect, useState } from "react";
+import EmptyHeart from '../../assets/svgs/empty_heart.svg';
+import PurpleHeart from '../../assets/svgs/purple_heart.svg';
 
 
 const PostContainer = styled.div `
@@ -232,8 +234,36 @@ const LikeShare = styled.div `
 
 const  Post = (props) => {
 
+    const [loggedInUserLiked, setLoggedInUserLiked] = useState(props.post.logged_in_user_liked);
+    const [amountOfLikes, setAmountOfLikes] = useState(props.post.amount_of_likes);
 
-    // TODO: close modal with YES/NO
+    const likePostHandler = async (e) => {
+        e.preventDefault();
+
+        if (props.post.is_from_logged_in_user) return null;
+
+        // fetch like post
+        const headers = new Headers({
+            "Authorization": `Bearer ${localStorage.getItem("token")}`
+        })
+    
+        const config = {
+            method: "POST",
+            headers,
+        }
+    
+        const url = `https://motion.propulsion-home.ch/backend/api/social/posts/toggle-like/${props.post.id}/`
+        
+        const res = await fetch(url, config);
+        const resData = await res.json();
+        console.log(resData)
+
+        // update the UI 
+
+        loggedInUserLiked ? setAmountOfLikes(amountOfLikes-1) : setAmountOfLikes(amountOfLikes+1);
+
+        setLoggedInUserLiked(!loggedInUserLiked);
+    }
 
     return ( 
     <PostContainer>
@@ -281,9 +311,10 @@ const  Post = (props) => {
         </FeedPic>
         }
         <LikeShare>                                    
-                <button><img src={ heart } alt= "heart_icon"/>Like</button>
+                <button><img src={loggedInUserLiked ? PurpleHeart : heart} onClick={likePostHandler} alt= "heart_icon"/>Like</button>
+
                 <button><img src={ share } alt="share_icon"/>Share</button>
-                <p>{props.post.amount_of_likes} Likes</p>
+                <p>{amountOfLikes} {amountOfLikes > 1 ? 'likes' : 'like' }</p>
         </LikeShare>
     </PostContainer>)
 }
