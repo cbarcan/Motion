@@ -9,7 +9,7 @@ const Following = () => {
 
     const dispatch = useDispatch();
     const users = useSelector(state => state.findFriendsReducer);
-    const url = "https://motion.propulsion-home.ch/backend/api/users/";
+    const url = "https://motion.propulsion-home.ch/backend/api/social/followers/following/";
     const token = `Bearer ${localStorage.getItem("token")}`;   
     const config = {
       method: "GET",
