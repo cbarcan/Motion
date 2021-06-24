@@ -1,6 +1,7 @@
 import { ProfileBox, BackgroundImg, ProfileLeft, BoxLeft, BoxRight, BoxBottomRight, BoxTopRight, ProfileDetails, ProfileContacts } from "./styled"
 import { Link, useHistory, useLocation } from "react-router-dom";
 import { useState, useEffect } from "react";
+import avatar from '../../assets/svgs/avatar.svg';
 
 
 const ProfileHead = () => {
@@ -43,7 +44,7 @@ const ProfileHead = () => {
             <ProfileBox>
                 <BoxLeft>
                     <ProfileLeft>
-                        <img alt='profile' src={userData.avatar} />
+                        <img alt='profile' src={userData.avatar ? userData.avatar : avatar} />
                         <h1>{`${userData.first_name} ${userData.last_name}`}</h1>
                         <h4>{userData.location}</h4>
                         <button onClick={edit}>EDIT PROFILE</button>
