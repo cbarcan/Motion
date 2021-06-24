@@ -82,9 +82,6 @@ deploy test:
 cleanup:
   stage: cleanup
   when: always
-  tags:
-    - test
-    - master
   script:
     - docker rmi -f "$CI_PIPELINE_ID":"$CI_COMMIT_REF_NAME"
     - docker-compose -p "$CI_PIPELINE_ID" -f docker-compose.ci.yml down --remove-orphans
