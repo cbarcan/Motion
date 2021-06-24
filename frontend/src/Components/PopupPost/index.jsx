@@ -4,6 +4,7 @@ import styled from 'styled-components';
 import Send from '../../assets/images/send_button.png';
 import ImageIcon from '../../assets/svgs/gallery.svg';
 import FileIcon from '../../assets/svgs/upload.svg';
+import avatar from '../../assets/svgs/avatar.svg';
 
 
 const BiggerContainer = styled.div`
@@ -244,7 +245,7 @@ const NewPost = (props) => {
         <BiggerContainer>
         <NewPostContainer>
             <NewPostTopContainer>
-                <img src={props.avatar} alt='profile'/>
+                <img src={props.avatar ? props.avatar : avatar} alt='profile'/>
                 <PostInput ref={inputCursor} onChange={postInputHandler} value={postText} type="text" placeholder={`What’s on your mind, ${props.first_name}?`}></PostInput>
             </NewPostTopContainer>
             <NewPostMiddleContainer>
