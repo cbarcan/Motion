@@ -74,6 +74,34 @@ const Posts = () => {
         const res = await fetch(url, config);
     }
 
+    const updateByID = async (id, text) => {
+        console.log('id:', id)
+        console.log('text:', text)
+
+        const url = `https://motion.propulsion-home.ch/backend/api/social/posts/${id}`;
+        let token = localStorage.token
+        token = `Bearer ${token}`
+
+        const config = {
+            method: "PATCH",
+            headers: new Headers({
+                "Content-Type": "application/json",
+                "Authorization": token.toString()
+            }),
+            body: JSON.stringify({
+                content: text
+            })
+        }
+    
+        const updatePost = async () => {
+        const res = await fetch(url, config);
+        const resData = await res.json();
+        console.log(resData)
+        }
+
+        updatePost()
+    }
+
     return (
         <>
             <Header/>
@@ -81,7 +109,7 @@ const Posts = () => {
                 <Wrapper>
                     <Search/>
                     <Switch>
-                        <Route path="/" render={() => <MainWall deleteByID={deleteByID} first_name={firstName} posts={posts.results} avatar={avatar}/>} exact/>
+                        <Route path="/" render={() => <MainWall updateByID={updateByID} deleteByID={deleteByID} first_name={firstName} posts={posts.results} avatar={avatar}/>} exact/>
                         <Route path="/posts/" render={() => <Wall deleteByID={deleteByID}
                                                                   first_name={firstName}
                                                                   url={`https://motion.propulsion-home.ch/backend/api/social/posts/${location.search}`}/>} exact/>
@@ -102,3 +130,4 @@ const Posts = () => {
 }
 
 export default Posts;
+

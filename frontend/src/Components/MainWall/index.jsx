@@ -128,10 +128,11 @@ const MainWall = (props) => {
                                 </span>
                         </Popup>
                     </CreateNewPost>
-                    {props.posts && props.posts.map((post) => <Post deleteByID={props.deleteByID} key={post.id} post={post} me={props.first_name}/>)}
+                    {props.posts && props.posts.map((post) => <Post updateByID={props.updateByID} deleteByID={props.deleteByID} key={post.id} post={post} me={props.first_name}/>)}
                 </Masonry>
             </LeftWall>
         </Wall>
     )
 }
 export default MainWall; 
+

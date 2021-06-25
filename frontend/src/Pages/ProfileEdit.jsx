@@ -322,17 +322,17 @@ const ProfileEdit = () => {
         }
     
         const fetchUsers = async () => {
-          const res = await fetch(url, config);
-          const resData = await res.json();
-            
-          // save user data in react state
-          // setUserData(resData)
-          setUserName(resData.username);
-          setFirstName(resData.first_name);
-          setLastName(resData.last_name);
-          setEmail(resData.email);
-          setLocation(resData.location);
-          setAbout(resData.about_me);
+        const res = await fetch(url, config);
+        const resData = await res.json();
+        
+        // save user data in react state
+        // setUserData(resData)
+        setUserName(resData.username);
+        setFirstName(resData.first_name);
+        setLastName(resData.last_name);
+        setEmail(resData.email);
+        setLocation(resData.location);
+        setAbout(resData.about_me);
 
 
 
@@ -367,10 +367,10 @@ const ProfileEdit = () => {
         const fetchUsers = async () => {
             const res = await fetch(url, config);
             const resData = await res.json();
-          }
-  
-          fetchUsers()
-          history.push('./login')
+        }
+
+        fetchUsers()
+        history.push('./login')
     }
 
     
