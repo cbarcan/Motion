@@ -79,11 +79,19 @@ deploy test:
     - docker-compose -f docker-compose.test.yml up -d
 
 
-cleanup:
+cleanup test:
   stage: cleanup
   when: always
   tags:
     - test
+  script:
+    - docker rmi -f "$CI_PIPELINE_ID":"$CI_COMMIT_REF_NAME"
+    - docker-compose -p "$CI_PIPELINE_ID" -f docker-compose.ci.yml down --remove-orphans
+    - docker system prune -a -f
+
+cleanup master:
+  stage: cleanup
+  when: always
   script:
     - docker rmi -f "$CI_PIPELINE_ID":"$CI_COMMIT_REF_NAME"
     - docker-compose -p "$CI_PIPELINE_ID" -f docker-compose.ci.yml down --remove-orphans

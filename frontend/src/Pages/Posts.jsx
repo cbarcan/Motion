@@ -2,9 +2,9 @@ import Header from "../Components/Header"
 import Search from "../Components/Search"
 import MainWall from "../Components/MainWall"
 import styled from 'styled-components';
-import React, {useEffect, useState} from 'react';
+import {useEffect, useState} from 'react';
 import {Main} from "../Style/container"
-import {Route, Switch, useHistory, useLocation} from "react-router-dom";
+import {Route, Switch, useLocation} from "react-router-dom";
 import Wall from "../Components/Wall";
 
 
