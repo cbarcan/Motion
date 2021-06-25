@@ -11,7 +11,7 @@ import { Provider } from 'react-redux';
 import store from "./Store"
 import Profile from './Pages/Profile';
 import ProfileEdit from './Pages/ProfileEdit';
-import withAuth from "./Components/HOC/withAuth"
+import WithAuth from "./Components/HOC/withAuth"
 
 const token = localStorage.getItem("token");
 store.dispatch({type: "setToken", payload: token})
@@ -22,8 +22,9 @@ ReactDOM.render(
       <GlobalStyle />
       <Router>
         <Switch>
-          <Route path="/" component={ withAuth(Posts) }/>
-          <Route path="/login" component={ Auth }/> 
+          <Route path="/" component={ WithAuth(Posts) } exact/>
+          <Route path="/posts" component={ Posts } />
+          <Route path="/login" component={ Auth } />
           <Route path="/signup" component={ SignUp } exact/>          
           <Route path="/find_friends" component={ FindFriends } exact/>
           <Route path="/profile" component={ Profile } />
