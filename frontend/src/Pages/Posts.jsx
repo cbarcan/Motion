@@ -108,9 +108,8 @@ const Posts = () => {
             <Main>
                 <Wrapper>
                     <Search/>
-                    {/* <MainWall deleteByID={deleteByID} updateByID={updateByID} first_name={firstName} posts={posts.results} avatar={avatar} /> */}
                     <Switch>
-                        <Route path="/" render={() => <MainWall deleteByID={deleteByID} first_name={firstName} posts={posts.results} avatar={avatar}/>} exact/>
+                        <Route path="/" render={() => <MainWall updateByID={updateByID} deleteByID={deleteByID} first_name={firstName} posts={posts.results} avatar={avatar}/>} exact/>
                         <Route path="/posts/" render={() => <Wall deleteByID={deleteByID}
                                                                   first_name={firstName}
                                                                   url={`https://motion.propulsion-home.ch/backend/api/social/posts/${location.search}`}/>} exact/>
